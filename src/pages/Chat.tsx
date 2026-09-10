@@ -3,9 +3,9 @@ import { Button } from "@/components/coss/button";
 import {
   Drawer,
   DrawerClose,
-  DrawerContent,
   DrawerFooter,
   DrawerHeader,
+  DrawerPopup,
 } from "@/components/coss/drawer";
 import {
   Menu,
@@ -105,7 +105,7 @@ function Chat() {
   ];
 
   return (
-    <div className="flex h-dvh flex-col bg-background text-foreground">
+    <div className="isolate-root flex h-dvh flex-col bg-background text-foreground">
       {/* Top bar */}
       <header className="flex h-16 shrink-0 items-center justify-between px-4">
         <button
@@ -363,8 +363,7 @@ function ProjectsDrawer({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} position="left">
-      <DrawerContent className="h-full w-[85vw] max-w-sm rounded-e-3xl border-border bg-card text-card-foreground">
-        <>
+      <DrawerPopup className="h-full w-[85vw] max-w-sm rounded-e-3xl border-border bg-card text-card-foreground">
             <DrawerHeader className="flex-row items-center gap-3 border-b border-border/60 pb-4">
               <button
                 type="button"
@@ -475,8 +474,7 @@ function ProjectsDrawer({
                 </MenuPopup>
               </Menu>
             </DrawerFooter>
-        </>
-      </DrawerContent>
+      </DrawerPopup>
     </Drawer>
   );
 }

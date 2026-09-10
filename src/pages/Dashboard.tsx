@@ -3,12 +3,10 @@ import LightRays from "@/components/LightRays";
 import { Button } from "@/components/coss/button";
 import {
   Drawer,
-  DrawerBackdrop,
   DrawerClose,
-  DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerViewport,
+  DrawerPopup,
 } from "@/components/coss/drawer";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/coss/empty";
 import { Input } from "@/components/coss/input";
@@ -19,11 +17,6 @@ import {
   MenuSeparator,
   MenuTrigger,
 } from "@/components/coss/menu";
-import {
-  Popover,
-  PopoverPopup,
-  PopoverTrigger,
-} from "@/components/coss/popover";
 import { useAuth } from "@/hooks/use-auth";
 import { useDarkMode } from "@/hooks/use-dark-mode";
 import { api } from "@/convex/_generated/api";
@@ -102,7 +95,7 @@ function Home() {
   }
 
   return (
-    <div className="relative flex h-dvh flex-col overflow-hidden bg-black text-white">
+    <div className="isolate-root relative flex h-dvh flex-col overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
         <LightRays
           raysOrigin="bottom-center"
@@ -154,8 +147,8 @@ function Home() {
             className="w-full resize-none bg-transparent px-6 pt-5 text-lg text-white placeholder:text-white/35 outline-none"
           />
           <div className="flex items-center justify-between px-4 pb-4 pt-1">
-            <Popover>
-              <PopoverTrigger
+            <Menu>
+              <MenuTrigger
                 render={
                   <button
                     type="button"
@@ -165,8 +158,8 @@ function Home() {
                 }
               >
                 <Plus className="size-5" />
-              </PopoverTrigger>
-              <PopoverPopup align="start" className="w-72 rounded-2xl border-white/10 bg-[#232530] p-2 text-white shadow-2xl">
+              </MenuTrigger>
+              <MenuPopup align="start" sideOffset={8} className="w-72 rounded-2xl border-white/10 bg-[#232530] p-2 text-white shadow-2xl">
                 <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2.5 text-white/40">
                   <Search className="size-4" />
                   <input
@@ -185,8 +178,8 @@ function Home() {
                   <Database className="size-4" /> Databases
                   <ChevronDown className="ml-auto size-4 -rotate-90 opacity-60" />
                 </MenuItem>
-              </PopoverPopup>
-            </Popover>
+              </MenuPopup>
+            </Menu>
 
             <div className="flex items-center gap-3">
               <button
@@ -226,8 +219,7 @@ function Home() {
 
       {/* Projects drawer */}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} position="left">
-        <DrawerContent className="h-full w-[85vw] max-w-sm rounded-e-3xl border-white/10 bg-[#1b1c22] text-white">
-          <>
+        <DrawerPopup className="h-full w-[85vw] max-w-sm rounded-e-3xl border-white/10 bg-[#1b1c22] text-white">
               <DrawerHeader className="flex-row items-center justify-between gap-3 border-b border-white/5 pb-4">
                 <button
                   type="button"
@@ -337,8 +329,7 @@ function Home() {
                   </MenuPopup>
                 </Menu>
               </DrawerFooter>
-            </>
-        </DrawerContent>
+        </DrawerPopup>
       </Drawer>
     </div>
   );
