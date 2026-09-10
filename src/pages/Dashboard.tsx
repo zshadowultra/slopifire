@@ -88,14 +88,13 @@ function Home() {
 
   if (authLoading || !onboardingReady) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-black">
-        <Loader2 className="size-6 animate-spin text-white/50" />
+      <main className="flex min-h-dvh items-center justify-center bg-background">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </main>
     );
   }
 
-  return (
-    <div className="isolate-root relative flex h-dvh flex-col overflow-hidden bg-black text-white">
+  return (      <div className="isolate-root relative flex h-dvh flex-col overflow-hidden bg-background text-foreground">
       <div className="absolute inset-0">
         <LightRays
           raysOrigin="bottom-center"
@@ -452,8 +451,8 @@ export default function Dashboard() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-black">
-          <Loader2 className="size-6 animate-spin text-white/50" />
+        <div className="flex min-h-dvh items-center justify-center bg-background">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
         </div>
       }
     >

@@ -83,7 +83,7 @@ function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-black text-white">
+    <div className="relative min-h-dvh overflow-hidden bg-background text-foreground">
       {/* LightRays (pulsating) backdrop */}
       <div className="absolute inset-0">
         <LightRays
@@ -199,7 +199,7 @@ function Landing() {
             transition={{ duration: 0.6, delay: 0.34 }}
             className="mt-16 w-full max-w-2xl rounded-[28px] border border-white/10 bg-[#1b1d24]/90 p-1.5 shadow-2xl shadow-black/50 backdrop-blur"
           >
-            <div className="rounded-[22px] bg-black/40 p-5 text-left">
+            <div className="rounded-[22px] bg-background/60 p-5 text-left">
               <div className="flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-full bg-orange-600 text-sm font-semibold">
                   V
@@ -261,7 +261,7 @@ function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.45, delay: i * 0.1 }}
-                  className="rounded-3xl border border-white/10 bg-black/40 p-6 backdrop-blur"
+                  className="rounded-3xl border border-white/10 bg-background/60 p-6 backdrop-blur"
                 >
                   <span className="font-heading bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-4xl font-semibold text-transparent">
                     {s.step}
@@ -320,8 +320,8 @@ export default function LandingPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-black">
-          <div className="size-6 animate-pulse rounded-full bg-white/20" />
+        <div className="flex min-h-dvh items-center justify-center bg-background">
+          <div className="size-6 animate-pulse rounded-full bg-muted" />
         </div>
       }
     >

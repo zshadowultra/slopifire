@@ -101,7 +101,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   };
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-black text-white">
+    <div className="relative min-h-dvh overflow-hidden bg-background text-foreground">
       {/* LightRays (pulsating) background */}
       <div className="absolute inset-0">
         <LightRays
@@ -118,7 +118,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           noiseAmount={0.05}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-transparent to-black/70" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-black/70" />
 
       <div className="isolate-root relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-6">
         <div className="h-14 shrink-0" />
@@ -300,9 +300,8 @@ function GoogleGlyph() {
 export default function AuthPage(props: AuthProps) {
   return (
     <Suspense
-      fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-black">
-          <Loader2 className="size-6 animate-spin text-white/50" />
+      fallback={          <div className="flex min-h-dvh items-center justify-center bg-background">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
         </div>
       }
     >
