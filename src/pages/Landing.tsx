@@ -15,7 +15,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Suspense } from "react";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 const features = [
   {
@@ -79,6 +79,7 @@ const steps = [
 
 function Landing() {
   useDarkMode(true);
+  const navigate = useNavigate();
 
   return (
     <div className="relative min-h-dvh overflow-hidden bg-black text-white">
@@ -106,18 +107,14 @@ function Landing() {
           <LovableWordmark size={28} />
           <div className="flex items-center gap-3">
             <Button
-              render={
-                <Link to="/auth" />
-              }
+              onClick={() => navigate("/auth")}
               variant="ghost"
               className="text-white/80 hover:bg-white/10 hover:text-white dark:bg-transparent dark:text-white/80"
             >
               Log in
             </Button>
             <Button
-              render={
-                <Link to="/auth?returnTo=%2Fdashboard" />
-              }
+              onClick={() => navigate("/auth?returnTo=%2Fdashboard")}
               className="rounded-full bg-white font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
             >
               Start building
@@ -172,9 +169,7 @@ function Landing() {
             className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
           >
             <Button
-              render={
-                <Link to="/auth?returnTo=%2Fdashboard" />
-              }
+              onClick={() => navigate("/auth?returnTo=%2Fdashboard")}
               size="xl"
               className="h-14 rounded-full bg-white px-8 text-lg font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
             >
@@ -182,9 +177,7 @@ function Landing() {
               <ArrowRight />
             </Button>
             <Button
-              render={
-                <Link to="/auth" />
-              }
+              onClick={() => navigate("/auth")}
               size="xl"
               variant="outline"
               className="h-14 rounded-full border-white/15 bg-white/5 px-8 text-lg text-white/80 hover:bg-white/10 hover:text-white dark:bg-white/5 dark:text-white/80"
@@ -294,9 +287,7 @@ function Landing() {
               conversation.
             </p>
             <Button
-              render={
-                <Link to="/auth?returnTo=%2Fdashboard" />
-              }
+              onClick={() => navigate("/auth?returnTo=%2Fdashboard")}
               size="xl"
               className="h-14 rounded-full bg-white px-10 text-lg font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
             >
