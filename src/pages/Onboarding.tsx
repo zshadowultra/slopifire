@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useDarkMode } from "@/hooks/use-dark-mode";
 import { motion } from "framer-motion";
 import { Bell, Loader2 } from "lucide-react";
+import { MicroButton } from "@/components/micro";
 import { Suspense, useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { Navigate, useNavigate } from "react-router";
@@ -132,40 +133,43 @@ function OnboardingInner() {
 
             <div className="mt-10 grid grid-cols-2 gap-5">
               {(["light", "dark"] as const).map((t) => (
-                <motion.button
-                  key={t}
-                  type="button"
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setTheme(t)}
-                  className="group flex flex-col items-center gap-3 rounded-2xl"
-                >
-                  <div
-                    className={
-                      "h-48 w-full overflow-hidden rounded-2xl border-2 transition-all " +
-                      (theme === t
-                        ? "border-white shadow-[0_0_0_1px_rgba(255,255,255,0.25)]"
-                        : "border-white/10 group-hover:border-white/30")
-                    }
+                <MicroButton key={t}>
+                  <motion.button
+                    type="button"
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setTheme(t)}
+                    className="group flex flex-col items-center gap-3 rounded-2xl"
                   >
-                    <StylePreview theme={t} />
-                  </div>
-                  <span className="text-xl font-semibold capitalize">
-                    {t}
-                  </span>
-                </motion.button>
+                    <div
+                      className={
+                        "h-48 w-full overflow-hidden rounded-2xl border-2 transition-all " +
+                        (theme === t
+                          ? "border-white shadow-[0_0_0_1px_rgba(255,255,255,0.25)]"
+                          : "border-white/10 group-hover:border-white/30")
+                      }
+                    >
+                      <StylePreview theme={t} />
+                    </div>
+                    <span className="text-xl font-semibold capitalize">
+                      {t}
+                    </span>
+                  </motion.button>
+                </MicroButton>
               ))}
             </div>
 
-            <Button
-              type="button"
-              size="xl"
-              disabled={saving}
-              loading={saving}
-              className="mt-10 h-16 w-full rounded-full bg-white font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
-              onClick={() => setSlide(1)}
-            >
-              {saving ? "" : "Next"}
-            </Button>
+            <MicroButton>
+              <Button
+                type="button"
+                size="xl"
+                disabled={saving}
+                loading={saving}
+                className="mt-10 h-16 w-full rounded-full bg-white font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
+                onClick={() => setSlide(1)}
+              >
+                {saving ? "" : "Next"}
+              </Button>
+            </MicroButton>
           </>
         ) : (
           <>
@@ -189,31 +193,34 @@ function OnboardingInner() {
                   </p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center gap-3">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="xl"
-                  className="h-14 flex-1 rounded-full bg-white/10 text-base font-semibold text-white hover:bg-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-                  onClick={() => void finish(theme)}
-                >
-                  Skip
-                </Button>
-                <Button
-                  type="button"
-                  size="xl"
-                  className="h-14 flex-1 rounded-full bg-blue-600 text-base font-semibold text-white shadow-none hover:bg-blue-500 dark:bg-blue-600 dark:text-white"
-                  onClick={() => {
-                    try {
-                      void Notification.requestPermission?.();
-                    } catch {
-                      /* unsupported */
-                    }
-                    void finish(theme);
-                  }}
-                >
-                  Enable
-                </Button>
+              <div className="mt-5 flex items-center gap-3">                  <MicroButton>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="xl"
+                      className="h-14 flex-1 rounded-full bg-white/10 text-base font-semibold text-white hover:bg-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                      onClick={() => void finish(theme)}
+                    >
+                      Skip
+                    </Button>
+                  </MicroButton>
+                  <MicroButton>
+                    <Button
+                      type="button"
+                      size="xl"
+                      className="h-14 flex-1 rounded-full bg-blue-600 text-base font-semibold text-white shadow-none hover:bg-blue-500 dark:bg-blue-600 dark:text-white"
+                      onClick={() => {
+                        try {
+                          void Notification.requestPermission?.();
+                        } catch {
+                          /* unsupported */
+                        }
+                        void finish(theme);
+                      }}
+                    >
+                      Enable
+                    </Button>
+                  </MicroButton>
               </div>
             </div>
 

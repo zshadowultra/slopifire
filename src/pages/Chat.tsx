@@ -37,6 +37,7 @@ import {
   ThumbsUp,
   X,
 } from "lucide-react";
+import { BubbleIn, MicroButton } from "@/components/micro";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
@@ -112,34 +113,50 @@ function Chat() {
       <div className="flex h-full min-w-0 flex-1 flex-col">
         {/* Top bar */}
         <header className="flex h-16 shrink-0 items-center justify-between px-4">
-          <button
-            type="button"
-            onClick={() => setDrawerOpen(true)}
-            aria-label="Open projects"
-            className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
-          >
-            <MenuIcon className="size-5" />
-          </button>
+          <MicroButton>
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Open projects"
+              className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
+            >
+              <MenuIcon className="size-5" />
+            </button>
+          </MicroButton>
 
-          <button
-            type="button"
-            onClick={() => navigate("/dashboard")}
-            className="flex h-12 max-w-[55vw] items-center gap-2 rounded-full border border-border bg-card px-5 text-xl font-semibold hover:bg-accent"
-          >
-            <span className="truncate">{project?.name ?? "New project"}</span>
-            <ChevronDown className="size-5 shrink-0 opacity-60" />
-          </button>
+          <MicroButton>
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard")}
+              className="flex h-12 max-w-[55vw] items-center gap-2 rounded-full border border-border bg-card px-5 text-xl font-semibold hover:bg-accent"
+            >
+              <span className="truncate">
+                {project?.name ?? "New project"}
+              </span>
+              <ChevronDown className="size-5 shrink-0 opacity-60" />
+            </button>
+          </MicroButton>
 
-          <button
-            type="button"
-            onClick={() => navigate("/dashboard")}
-            aria-label="Back to home"
-            className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
-          >
-            <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m9 6 6 6-6 6" />
-            </svg>
-          </button>
+          <MicroButton>
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard")}
+              aria-label="Back to home"
+              className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </button>
+          </MicroButton>
         </header>
 
         {/* Messages */}
@@ -192,16 +209,18 @@ function Chat() {
         {/* Mobile: open the live preview in a new tab */}
         {project?.previewUrl && (
           <div className="px-4 pb-2 lg:hidden">
-            <a
-              href={project.previewUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
-            >
-              <AppWindow className="size-4" />
-              Open live preview
-              <ExternalLink className="size-4" />
-            </a>
+            <MicroButton>
+              <a
+                href={project.previewUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
+              >
+                <AppWindow className="size-4" />
+                Open live preview
+                <ExternalLink className="size-4" />
+              </a>
+            </MicroButton>
           </div>
         )}
 
@@ -209,14 +228,15 @@ function Chat() {
         <div className="shrink-0 px-4 pb-5">
           <div className="no-scrollbar mb-3 flex gap-2.5 overflow-x-auto">
             {suggestions.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => void handleSend(s)}
-                className="shrink-0 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
-              >
-                {s}
-              </button>
+              <MicroButton key={s}>
+                <button
+                  type="button"
+                  onClick={() => void handleSend(s)}
+                  className="shrink-0 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
+                >
+                  {s}
+                </button>
+              </MicroButton>
             ))}
           </div>
 
@@ -236,45 +256,61 @@ function Chat() {
             />
             <div className="flex items-center justify-between px-3.5 pb-3.5 pt-1">
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  aria-label="Attach"
-                  className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  <Plus className="size-5" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="More"
-                  className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  <MoreHorizontal className="size-5" />
-                </button>
+                <MicroButton>
+                  <button
+                    type="button"
+                    aria-label="Attach"
+                    className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    <Plus className="size-5" />
+                  </button>
+                </MicroButton>
+                <MicroButton>
+                  <button
+                    type="button"
+                    aria-label="More"
+                    className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    <MoreHorizontal className="size-5" />
+                  </button>
+                </MicroButton>
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="flex h-10 items-center gap-1.5 rounded-full px-3 text-base font-medium transition-colors hover:bg-accent"
-                >
-                  Build
-                  <ChevronDown className="size-4 opacity-70" />
-                </button>
-                <button
-                  type="button"
-                  disabled={!input.trim() || sending}
-                  onClick={() => void handleSend(input)}
-                  aria-label="Send"
-                  className="flex size-10 items-center justify-center rounded-full bg-foreground text-background transition-opacity disabled:opacity-30"
-                >
-                  {sending ? (
-                    <Loader2 className="size-5 animate-spin" />
-                  ) : (
-                    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14" />
-                      <path d="m13 6 6 6-6 6" />
-                    </svg>
-                  )}
-                </button>
+                <MicroButton>
+                  <button
+                    type="button"
+                    className="flex h-10 items-center gap-1.5 rounded-full px-3 text-base font-medium transition-colors hover:bg-accent"
+                  >
+                    Build
+                    <ChevronDown className="size-4 opacity-70" />
+                  </button>
+                </MicroButton>
+                <MicroButton>
+                  <button
+                    type="button"
+                    disabled={!input.trim() || sending}
+                    onClick={() => void handleSend(input)}
+                    aria-label="Send"
+                    className="flex size-10 items-center justify-center rounded-full bg-foreground text-background transition-opacity disabled:opacity-30"
+                  >
+                    {sending ? (
+                      <Loader2 className="size-5 animate-spin" />
+                    ) : (
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="size-5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    )}
+                  </button>
+                </MicroButton>
               </div>
             </div>
           </div>
@@ -286,6 +322,7 @@ function Chat() {
         <PreviewPanel
           previewUrl={project?.previewUrl ?? null}
           status={project?.sandboxStatus ?? "idle"}
+          onReloadFrame={() => {}}
         />
       </aside>
 
@@ -314,16 +351,15 @@ function Chat() {
   );
 }
 
-/**
- * Live preview of the generated app running in the E2B sandbox —
- * the fragment-web pattern from e2b-dev/fragments.
- */
+/** Live preview panel with micro interactions on header controls. */
 function PreviewPanel({
   previewUrl,
   status,
+  onReloadFrame,
 }: {
   previewUrl: string | null;
   status: "idle" | "building" | "running" | "error" | undefined;
+  onReloadFrame?: () => void;
 }) {
   const [frameKey, setFrameKey] = useState(0);
   const hasUrl = previewUrl !== null && previewUrl !== "";
@@ -355,23 +391,27 @@ function PreviewPanel({
         </div>
         {hasUrl && (
           <div className="flex items-center gap-1">
-            <button
-              type="button"
-              aria-label="Reload preview"
-              onClick={() => setFrameKey((k) => k + 1)}
-              className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              <RotateCw className="size-4" />
-            </button>
-            <a
-              href={previewUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Open in new tab"
-              className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              <ExternalLink className="size-4" />
-            </a>
+            <MicroButton onPress={onReloadFrame}>
+              <button
+                type="button"
+                aria-label="Reload preview"
+                onClick={() => setFrameKey((k) => k + 1)}
+                className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                <RotateCw className="size-4" />
+              </button>
+            </MicroButton>
+            <MicroButton>
+              <a
+                href={previewUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open in new tab"
+                className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                <ExternalLink className="size-4" />
+              </a>
+            </MicroButton>
           </div>
         )}
       </div>
@@ -422,19 +462,39 @@ function MessageBubble({ message }: { message: Doc<"messages"> }) {
   if (isUser) {
     return (
       <div className="flex flex-col items-end gap-2">
-        <div className="max-w-[80%] rounded-3xl rounded-br-lg bg-muted px-5 py-3.5 text-lg">
-          {message.content}
-        </div>
+        <BubbleIn>
+          <div className="max-w-[80%] rounded-3xl rounded-br-lg bg-muted px-5 py-3.5 text-lg">
+            {message.content}
+          </div>
+        </BubbleIn>
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <button type="button" aria-label="Duplicate" className="hover:text-foreground">
-            <Copy className="size-4" />
-          </button>
-          <button type="button" aria-label="Copy link" className="hover:text-foreground">
-            <Link2 className="size-4" />
-          </button>
-          <button type="button" aria-label="Attach" className="hover:text-foreground">
-            <Paperclip className="size-4" />
-          </button>
+          <MicroButton>
+            <button
+              type="button"
+              aria-label="Duplicate"
+              className="hover:text-foreground"
+            >
+              <Copy className="size-4" />
+            </button>
+          </MicroButton>
+          <MicroButton>
+            <button
+              type="button"
+              aria-label="Copy link"
+              className="hover:text-foreground"
+            >
+              <Link2 className="size-4" />
+            </button>
+          </MicroButton>
+          <MicroButton>
+            <button
+              type="button"
+              aria-label="Attach"
+              className="hover:text-foreground"
+            >
+              <Paperclip className="size-4" />
+            </button>
+          </MicroButton>
           <span>Today at {formatTime(message._creationTime)}</span>
         </div>
       </div>
@@ -449,43 +509,56 @@ function MessageBubble({ message }: { message: Doc<"messages"> }) {
         </p>
       )}
       {message.fileCount != null && message.fileCount > 0 && (
-        <p className="flex items-center gap-2 text-sm font-medium text-emerald-500">
-          <AppWindow className="size-4" />
-          Updated {message.fileCount} file{message.fileCount === 1 ? "" : "s"}
-        </p>
+        <BubbleIn>
+          <p className="flex items-center gap-2 text-sm font-medium text-emerald-500">
+            <AppWindow className="size-4" />
+            Updated {message.fileCount} file
+            {message.fileCount === 1 ? "" : "s"}
+          </p>
+        </BubbleIn>
       )}
-      <p className="whitespace-pre-wrap text-lg leading-relaxed">
-        {message.content}
-      </p>
+      <BubbleIn>
+        <p className="whitespace-pre-wrap text-lg leading-relaxed">
+          {message.content}
+        </p>
+      </BubbleIn>
       <div className="flex items-center gap-4 text-muted-foreground">
-        <button
-          type="button"
-          aria-label="Good response"
-          className="hover:text-foreground"
-        >
-          <ThumbsUp className="size-4.5" />
-        </button>
-        <button
-          type="button"
-          aria-label="Poor response"
-          className="hover:text-foreground"
-        >
-          <ThumbsDown className="size-4.5" />
-        </button>
-        <button
-          type="button"
-          aria-label="Duplicate"
-          className="hover:text-foreground"
-        >
-          <Copy className="size-4.5" />
-        </button>
-        <button
-          type="button"
-          aria-label="More options"
-          className="hover:text-foreground"
-        >
-          <MoreHorizontal className="size-4.5" />
-        </button>
+        <MicroButton>
+          <button
+            type="button"
+            aria-label="Good response"
+            className="hover:text-foreground"
+          >
+            <ThumbsUp className="size-4.5" />
+          </button>
+        </MicroButton>
+        <MicroButton>
+          <button
+            type="button"
+            aria-label="Poor response"
+            className="hover:text-foreground"
+          >
+            <ThumbsDown className="size-4.5" />
+          </button>
+        </MicroButton>
+        <MicroButton>
+          <button
+            type="button"
+            aria-label="Duplicate"
+            className="hover:text-foreground"
+          >
+            <Copy className="size-4.5" />
+          </button>
+        </MicroButton>
+        <MicroButton>
+          <button
+            type="button"
+            aria-label="More options"
+            className="hover:text-foreground"
+          >
+            <MoreHorizontal className="size-4.5" />
+          </button>
+        </MicroButton>
       </div>
     </div>
   );
@@ -520,116 +593,127 @@ function ProjectsDrawer({
   return (
     <Drawer open={open} onOpenChange={onOpenChange} position="left">
       <DrawerPopup className="h-full w-[85vw] max-w-sm rounded-e-3xl border-border bg-card text-card-foreground">
-            <DrawerHeader className="flex-row items-center gap-3 border-b border-border/60 pb-4">
-              <button
-                type="button"
-                onClick={onHome}
-                aria-label="Home"
-                className="flex size-12 items-center justify-center rounded-full border border-border bg-background hover:bg-accent"
-              >
-                <LovableHeart size={22} />
-              </button>
-              <button
-                type="button"
-                onClick={onHome}
-                className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-background text-lg font-medium hover:bg-accent"
-              >
-                All projects
-                <ChevronDown className="size-4 opacity-70" />
-              </button>
-              <DrawerClose
+        <DrawerHeader className="flex-row items-center gap-3 border-b border-border/60 pb-4">
+          <MicroButton>
+            <button
+              type="button"
+              onClick={onHome}
+              aria-label="Home"
+              className="flex size-12 items-center justify-center rounded-full border border-border bg-background hover:bg-accent"
+            >
+              <LovableHeart size={22} />
+            </button>
+          </MicroButton>
+          <MicroButton>
+            <button
+              type="button"
+              onClick={onHome}
+              className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-background text-lg font-medium hover:bg-accent"
+            >
+              All projects
+              <ChevronDown className="size-4 opacity-70" />
+            </button>
+          </MicroButton>
+          <DrawerClose
+            render={
+              <MicroButton>
+                <button
+                  type="button"
+                  aria-label="Close"
+                  onClick={() => onOpenChange(false)}
+                  className="flex size-12 items-center justify-center rounded-full border border-border bg-background hover:bg-accent"
+                />
+              </MicroButton>
+            }
+          >
+            <X className="size-5" />
+          </DrawerClose>
+        </DrawerHeader>
+
+        <div className="px-5 pt-4">
+          <div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-2.5">
+            <Search className="size-4 text-muted-foreground" />
+            <input
+              value={projectQuery}
+              onChange={(e) => setProjectQuery(e.target.value)}
+              placeholder="Search projects"
+              className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground/70"
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-5 py-4">
+          {projects === undefined ? (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" /> Loading…
+            </div>
+          ) : filtered.length === 0 ? (
+            <p className="pt-6 text-lg text-muted-foreground">
+              No projects found.
+            </p>
+          ) : (
+            <ul className="flex flex-col gap-1.5">
+              {filtered.map((p: Doc<"projects">) => (
+                <li key={p._id}>
+                  <MicroButton>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate(p._id)}
+                      className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-base font-medium transition-colors ${
+                        p._id === activeProjectId
+                          ? "bg-accent text-accent-foreground"
+                          : "hover:bg-accent/60"
+                      }`}
+                    >
+                      <span className="truncate">{p.name}</span>
+                    </button>
+                  </MicroButton>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <DrawerFooter className="flex-row items-center gap-3 border-t border-border/60 py-4">
+          <MicroButton>
+            <button
+              type="button"
+              onClick={onHome}
+              className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-border bg-background px-2 text-left hover:bg-accent"
+            >
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-base font-semibold text-white">
+                {initial}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-base font-medium">
+                {workspaceLabel}
+              </span>
+              <ChevronDown className="me-2 size-4 shrink-0 opacity-60" />
+            </button>
+          </MicroButton>
+          <MicroButton>
+            <Menu>
+              <MenuTrigger
                 render={
                   <button
                     type="button"
-                    aria-label="Close"
-                    onClick={() => onOpenChange(false)}
-                    className="flex size-12 items-center justify-center rounded-full border border-border bg-background hover:bg-accent"
+                    aria-label="Account"
+                    className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pink-600 text-lg font-semibold text-white hover:bg-pink-500"
                   />
                 }
               >
-                <X className="size-5" />
-              </DrawerClose>
-            </DrawerHeader>
-
-            <div className="px-5 pt-4">
-              <div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-2.5">
-                <Search className="size-4 text-muted-foreground" />
-                <input
-                  value={projectQuery}
-                  onChange={(e) => setProjectQuery(e.target.value)}
-                  placeholder="Search projects"
-                  className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground/70"
-                />
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-5 py-4">
-              {projects === undefined ? (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Loader2 className="size-4 animate-spin" /> Loading…
-                </div>
-              ) : filtered.length === 0 ? (
-                <p className="pt-6 text-lg text-muted-foreground">
-                  No projects found.
-                </p>
-              ) : (
-                <ul className="flex flex-col gap-1.5">
-                  {filtered.map((p: Doc<"projects">) => (
-                    <li key={p._id}>
-                      <button
-                        type="button"
-                        onClick={() => onNavigate(p._id)}
-                        className={
-                          "flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-base font-medium transition-colors " +
-                          (p._id === activeProjectId
-                            ? "bg-accent text-accent-foreground"
-                            : "hover:bg-accent/60")
-                        }
-                      >
-                        <span className="truncate">{p.name}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            <DrawerFooter className="flex-row items-center gap-3 border-t border-border/60 py-4">
-              <button
-                type="button"
-                onClick={onHome}
-                className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-border bg-background px-2 text-left hover:bg-accent"
-              >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-base font-semibold text-white">
-                  {initial}
-                </span>
-                <span className="min-w-0 flex-1 truncate text-base font-medium">
-                  {workspaceLabel}
-                </span>
-                <ChevronDown className="me-2 size-4 shrink-0 opacity-60" />
-              </button>
-              <Menu>
-                <MenuTrigger
-                  render={
-                    <button
-                      type="button"
-                      aria-label="Account"
-                      className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pink-600 text-lg font-semibold text-white hover:bg-pink-500"
-                    />
-                  }
+                {initial}
+              </MenuTrigger>
+              <MenuPopup align="end" side="top" className="w-48">
+                <MenuItem
+                  className="px-3 py-2.5 text-base"
+                  onClick={() => void onSignOut()}
                 >
-                  {initial}
-                </MenuTrigger>
-                <MenuPopup align="end" side="top" className="w-48">
-                  <MenuItem
-                    className="px-3 py-2.5 text-base"
-                    onClick={() => void onSignOut()}
-                  >
-                    <LogOut className="size-4" /> Log out
-                  </MenuItem>
-                </MenuPopup>
-              </Menu>
-            </DrawerFooter>
+                  <LogOut className="size-4" /> Log out
+                </MenuItem>
+              </MenuPopup>
+            </Menu>
+          </MicroButton>
+        </DrawerFooter>
       </DrawerPopup>
     </Drawer>
   );

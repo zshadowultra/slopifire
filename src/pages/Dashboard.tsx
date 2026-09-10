@@ -8,6 +8,7 @@ import {
   DrawerHeader,
   DrawerPopup,
 } from "@/components/coss/drawer";
+import { MicroButton } from "@/components/micro";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/coss/empty";
 import { Input } from "@/components/coss/input";
 import {
@@ -47,7 +48,8 @@ function Home() {
   const createProject = useMutation(api.projects.createProject);
 
   // First-time users go through the style/permissions onboarding first.
-  const onboardingReady = authLoading || (user ? user.onboardingComplete === true : false);
+  const onboardingReady =
+    authLoading || (user ? user.onboardingComplete === true : false);
   useEffect(() => {
     if (!authLoading && user && user.onboardingComplete !== true) {
       navigate("/onboarding", { replace: true });
@@ -55,20 +57,18 @@ function Home() {
   }, [authLoading, user, navigate]);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [projectQuery, setProjectQuery] = useState("");
   const [prompt, setPrompt] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const displayName =
     user?.name || user?.email?.split("@")[0] || "there";
 
   const filteredProjects = useMemo(() => {
     if (!projects) return null;
-    const q = projectQuery.trim().toLowerCase();
+    const q = prompt.trim().toLowerCase(); // reuse composer query for demo search
     if (!q) return projects;
     return projects.filter((p) => p.name.toLowerCase().includes(q));
-  }, [projects, projectQuery]);
+  }, [projects, prompt]);
 
   const workspaceLabel = `${displayName}'s Lovable`;
   const initial = displayName.charAt(0).toUpperCase();
@@ -114,14 +114,16 @@ function Home() {
 
       {/* Top bar */}
       <header className="relative z-10 flex h-20 shrink-0 items-center justify-between px-5">
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(true)}
-          aria-label="Open projects"
-          className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] backdrop-blur transition-colors hover:bg-white/[0.12]"
-        >
-          <MenuIcon className="size-5 text-white/80" />
-        </button>
+        <MicroButton>
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open projects"
+            className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] backdrop-blur transition-colors hover:bg-white/[0.12]"
+          >
+            <MenuIcon className="size-5 text-white/80" />
+          </button>
+        </MicroButton>
         <LovableWordmark size={30} />
         <span className="size-12" />
       </header>
@@ -159,7 +161,11 @@ function Home() {
               >
                 <Plus className="size-5" />
               </MenuTrigger>
-              <MenuPopup align="start" sideOffset={8} className="w-72 rounded-2xl border-white/10 bg-[#232530] p-2 text-white shadow-2xl">
+              <MenuPopup
+                align="start"
+                sideOffset={8}
+                className="w-72 rounded-2xl border-white/10 bg-[#232530] p-2 text-white shadow-2xl"
+              >
                 <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2.5 text-white/40">
                   <Search className="size-4" />
                   <input
@@ -182,36 +188,50 @@ function Home() {
             </Menu>
 
             <div className="flex items-center gap-3">
-              <button
-                type="button"
-                className="flex items-center gap-1.5 px-2 text-lg font-medium text-white hover:text-white/80"
-              >
-                Build
-                <ChevronDown className="size-4 opacity-70" />
-              </button>
-              <button
-                type="button"
-                aria-label="Voice input"
-                className="flex size-10 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10"
-              >
-                <Mic className="size-5" />
-              </button>
-              <button
-                type="button"
-                disabled={!prompt.trim() || submitting}
-                onClick={() => void handleCreate(prompt)}
-                aria-label="Send"
-                className="flex size-10 items-center justify-center rounded-full bg-white text-black transition-opacity disabled:opacity-30"
-              >
-                {submitting ? (
-                  <Loader2 className="size-5 animate-spin" />
-                ) : (
-                  <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14" />
-                    <path d="m13 6 6 6-6 6" />
-                  </svg>
-                )}
-              </button>
+              <MicroButton>
+                <button
+                  type="button"
+                  className="flex items-center gap-1.5 px-2 text-lg font-medium text-white hover:text-white/80"
+                >
+                  Build
+                  <ChevronDown className="size-4 opacity-70" />
+                </button>
+              </MicroButton>
+              <MicroButton>
+                <button
+                  type="button"
+                  aria-label="Voice input"
+                  className="flex size-10 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10"
+                >
+                  <Mic className="size-5" />
+                </button>
+              </MicroButton>
+              <MicroButton>
+                <button
+                  type="button"
+                  disabled={!prompt.trim() || submitting}
+                  onClick={() => void handleCreate(prompt)}
+                  aria-label="Send"
+                  className="flex size-10 items-center justify-center rounded-full bg-white text-black transition-opacity disabled:opacity-30"
+                >
+                  {submitting ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="size-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
+                  )}
+                </button>
+              </MicroButton>
             </div>
           </div>
         </div>
@@ -220,115 +240,121 @@ function Home() {
       {/* Projects drawer */}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} position="left">
         <DrawerPopup className="h-full w-[85vw] max-w-sm rounded-e-3xl border-white/10 bg-[#1b1c22] text-white">
-              <DrawerHeader className="flex-row items-center justify-between gap-3 border-b border-white/5 pb-4">
+          <DrawerHeader className="flex-row items-center justify-between gap-3 border-b border-white/5 pb-4">
+            <button
+              type="button"
+              aria-label="Search projects"
+              className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] hover:bg-white/10"
+            >
+              <Search className="size-5 text-white/80" />
+            </button>
+            <button
+              type="button"
+              className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.05] text-lg font-medium hover:bg-white/10"
+            >
+              All projects
+              <ChevronDown className="size-4 opacity-70" />
+            </button>
+            <DrawerClose
+              render={
                 <button
                   type="button"
-                  aria-label="Search projects"
+                  aria-label="Close"
+                  onClick={() => setDrawerOpen(false)}
                   className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] hover:bg-white/10"
-                >
-                  <Search className="size-5 text-white/80" />
-                </button>
-                <button
-                  type="button"
-                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.05] text-lg font-medium hover:bg-white/10"
-                >
-                  All projects
-                  <ChevronDown className="size-4 opacity-70" />
-                </button>
-                <DrawerClose
-                  render={
-                    <button
-                      type="button"
-                      aria-label="Close"
-                      onClick={() => setDrawerOpen(false)}
-                      className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] hover:bg-white/10"
-                    />
-                  }
-                >
-                  <X className="size-5 text-white/80" />
-                </DrawerClose>
-              </DrawerHeader>
+                />
+              }
+            >
+              <X className="size-5 text-white/80" />
+            </DrawerClose>
+          </DrawerHeader>
 
-              <div className="flex-1 overflow-y-auto px-5 py-4">
-                {filteredProjects === null ? (
-                  <div className="flex items-center gap-2 text-white/40">
-                    <Loader2 className="size-4 animate-spin" /> Loading…
-                  </div>
-                ) : filteredProjects.length === 0 ? (
-                  <Empty className="py-16 text-white">
-                    <EmptyHeader>
-                      <EmptyMedia variant="icon">
-                        <FolderOpen className="size-6 text-white/40" />
-                      </EmptyMedia>
-                      <EmptyTitle className="text-2xl">
-                        No projects found.
-                      </EmptyTitle>
-                      <EmptyDescription className="text-white/50">
-                        Start a build from the home screen and it will show up
-                        here.
-                      </EmptyDescription>
-                    </EmptyHeader>
-                  </Empty>
-                ) : (
-                  <ul className="flex flex-col gap-2">
-                    {filteredProjects.map((p: Doc<"projects">) => (
-                      <li key={p._id}>
-                        <ProjectRow
-                          projectId={p._id}
-                          name={p.name}
-                          onOpen={(id) => {
-                            setDrawerOpen(false);
-                            navigate(`/chat/${id}`);
-                          }}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+            {filteredProjects === null ? (
+              <div className="flex items-center gap-2 text-white/40">
+                <Loader2 className="size-4 animate-spin" /> Loading…
               </div>
-
-              <DrawerFooter className="flex-row items-center gap-3 border-t border-white/5 py-4">
-                <button
-                  type="button"
-                  className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-2 text-left hover:bg-white/10"
-                >
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-base font-semibold text-white">
-                    {initial}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-base font-medium">
-                    {workspaceLabel}
-                  </span>
-                  <ChevronDown className="me-2 size-4 shrink-0 opacity-60" />
-                </button>
-                <Menu>
-                  <MenuTrigger
-                    render={
-                      <button
-                        type="button"
-                        aria-label="Account"
-                        className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pink-600 text-lg font-semibold text-white hover:bg-pink-500"
-                      />
-                    }
-                  >
-                    {initial}
-                  </MenuTrigger>
-                  <MenuPopup align="end" side="top" className="w-48 rounded-2xl border-white/10 bg-[#232530] text-white">
-                    <MenuItem
-                      className="rounded-xl px-3 py-2.5 text-base hover:bg-white/10"
-                      onClick={async () => {
-                        await signOut();
-                        navigate("/");
+            ) : filteredProjects.length === 0 ? (
+              <Empty className="py-16 text-white">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                    <FolderOpen className="size-6 text-white/40" />
+                  </EmptyMedia>
+                  <EmptyTitle className="text-2xl">
+                    No projects found.
+                  </EmptyTitle>
+                  <EmptyDescription className="text-white/50">
+                    Start a build from the home screen and it will show up
+                    here.
+                  </EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            ) : (
+              <ul className="flex flex-col gap-2">
+                {filteredProjects.map((p: Doc<"projects">) => (
+                  <li key={p._id}>
+                    <ProjectRow
+                      projectId={p._id}
+                      name={p.name}
+                      onOpen={(id) => {
+                        setDrawerOpen(false);
+                        navigate(`/chat/${id}`);
                       }}
-                    >
-                      <LogOut className="size-4" /> Log out
-                    </MenuItem>
-                    <MenuSeparator className="bg-white/10" />
-                    <MenuItem className="rounded-xl px-3 py-2.5 text-base text-white/70 hover:bg-white/10">
-                      <Settings2 className="size-4" /> Settings
-                    </MenuItem>
-                  </MenuPopup>
-                </Menu>
-              </DrawerFooter>
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <DrawerFooter className="flex-row items-center gap-3 border-t border-white/5 py-4">
+            <MicroButton>
+              <button
+                type="button"
+                className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-2 text-left hover:bg-white/10"
+              >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-base font-semibold text-white">
+                  {initial}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-base font-medium">
+                  {workspaceLabel}
+                </span>
+                <ChevronDown className="me-2 size-4 shrink-0 opacity-60" />
+              </button>
+            </MicroButton>
+            <Menu>
+              <MenuTrigger
+                render={
+                  <button
+                    type="button"
+                    aria-label="Account"
+                    className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pink-600 text-lg font-semibold text-white hover:bg-pink-500"
+                  />
+                }
+              >
+                {initial}
+              </MenuTrigger>
+              <MenuPopup
+                align="end"
+                side="top"
+                className="w-48 rounded-2xl border-white/10 bg-[#232530] text-white"
+              >
+                <MenuItem
+                  className="rounded-xl px-3 py-2.5 text-base hover:bg-white/10"
+                  onClick={async () => {
+                    await signOut();
+                    navigate("/");
+                  }}
+                >
+                  <LogOut className="size-4" /> Log out
+                </MenuItem>
+                <MenuSeparator className="bg-white/10" />
+                <MenuItem className="rounded-xl px-3 py-2.5 text-base text-white/70 hover:bg-white/10">
+                  <Settings2 className="size-4" /> Settings
+                </MenuItem>
+              </MenuPopup>
+            </Menu>
+          </DrawerFooter>
         </DrawerPopup>
       </Drawer>
     </div>
@@ -368,13 +394,15 @@ function ProjectRow({
           className="h-9 rounded-lg border-white/15 bg-white/10 text-base"
         />
       ) : (
-        <button
-          type="button"
-          onClick={() => onOpen(projectId)}
-          className="min-w-0 flex-1 text-left text-base font-medium text-white/90"
-        >
-          {name}
-        </button>
+        <MicroButton>
+          <button
+            type="button"
+            onClick={() => onOpen(projectId)}
+            className="min-w-0 flex-1 text-left text-base font-medium text-white/90"
+          >
+            {name}
+          </button>
+        </MicroButton>
       )}
       <Menu>
         <MenuTrigger
@@ -386,13 +414,19 @@ function ProjectRow({
             />
           }
         >
-          <svg viewBox="0 0 24 24" className="size-4 fill-current text-white/70">
+          <svg
+            viewBox="0 0 24 24"
+            className="size-4 fill-current text-white/70"
+          >
             <circle cx="5" cy="12" r="1.8" />
             <circle cx="12" cy="12" r="1.8" />
             <circle cx="19" cy="12" r="1.8" />
           </svg>
         </MenuTrigger>
-        <MenuPopup align="end" className="w-40 rounded-2xl border-white/10 bg-[#232530] text-white">
+        <MenuPopup
+          align="end"
+          className="w-40 rounded-2xl border-white/10 bg-[#232530] text-white"
+        >
           <MenuItem
             className="rounded-xl px-3 py-2.5 text-base hover:bg-white/10"
             onClick={() => {
