@@ -311,7 +311,7 @@ function Home() {
             <MicroButton>
               <button
                 type="button"
-                className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-2 text-left hover:bg-white/10"
+                className="flex h-12 shrink-0 items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-3 text-left hover:bg-white/10"
               >
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-base font-semibold text-white">
                   {initial}
