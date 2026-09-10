@@ -30,14 +30,27 @@ const schema = defineSchema(
       isAnonymous: v.optional(v.boolean()), // is the user anonymous. do not remove
 
       role: v.optional(roleValidator), // role of the user. do not remove
+
+      // Lovable-replica user preferences
+      themeChoice: v.optional(v.union(v.literal("light"), v.literal("dark"))),
+      onboardingComplete: v.optional(v.boolean()),
     }).index("email", ["email"]), // index for the email. do not remove or modify
 
-    // add other tables here
+    // A "project" is a chat thread in the Lovable replica
+    projects: defineTable({
+      userId: v.id("users"),
+      name: v.string(),
+      isArchived: v.optional(v.boolean()),
+    }).index("by_user", ["userId"]),
 
-    // tableName: defineTable({
-    //   ...
-    //   // table fields
-    // }).index("by_field", ["field"])
+    // Messages inside a project thread
+    messages: defineTable({
+      projectId: v.id("projects"),
+      userId: v.id("users"),
+      role: v.union(v.literal("user"), v.literal("assistant")),
+      content: v.string(),
+      thoughtSeconds: v.optional(v.number()),
+    }).index("by_project", ["projectId"]),
   },
   {
     schemaValidation: false,
