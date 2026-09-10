@@ -118,7 +118,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           noiseAmount={0.05}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-black/70" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-background/70" />
 
       <div className="isolate-root relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-6">
         <div className="h-14 shrink-0" />
@@ -139,7 +139,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 size="xl"
                 loading={false}
                 disabled={isLoading}
-                className="w-full rounded-full border-white/15 bg-white/5 text-lg text-white/60 hover:border-white/30 hover:bg-white/10 hover:text-white/80 dark:bg-white/5"
+                className="w-full rounded-full border-border/30 bg-background/40 text-foreground/70 hover:bg-background/60 dark:bg-background/40"
                 onClick={() =>
                   setError(
                     "Google sign-in is not available in this replica — use email below.",
@@ -156,7 +156,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 variant="outline"
                 size="xl"
                 disabled={isLoading}
-                className="w-full rounded-full border-white/15 bg-white/5 text-lg text-white/60 hover:border-white/30 hover:bg-white/10 hover:text-white/80 dark:bg-white/5"
+                className="w-full rounded-full border-border/30 bg-background/40 text-foreground/70 hover:bg-background/60 dark:bg-background/40"
                 onClick={() =>
                   setError(
                     "GitHub sign-in is not available in this replica — use email below.",
@@ -171,9 +171,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </div>
 
             <div className="mt-9 flex items-center gap-4">
-              <span className="h-px flex-1 bg-white/15" />
-              <span className="text-sm font-medium text-white/70">OR</span>
-              <span className="h-px flex-1 bg-white/15" />
+              <span className="h-px flex-1 bg-border/30" />
+              <span className="text-sm font-medium text-foreground/60">OR</span>
+              <span className="h-px flex-1 bg-border/30" />
             </div>
 
             <form onSubmit={handleEmailSubmit} className="mt-5">
@@ -191,17 +191,17 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 placeholder="Email"
                 autoComplete="email"
                 disabled={isLoading}
-                className="mt-3 h-16 rounded-full border-white/15 bg-white/5 px-6 text-lg text-white shadow-none placeholder:text-white/30 focus-visible:border-white/40 dark:border-white/15 dark:bg-white/5"
+                className="mt-3 h-16 rounded-full border-border/30 bg-background/50 px-6 text-lg text-foreground shadow-none placeholder:text-foreground/40 focus-visible:border-border/60"
               />
               {error && (
-                <p className="mt-3 px-2 text-sm text-red-400">{error}</p>
+                <p className="mt-3 px-2 text-sm text-destructive">{error}</p>
               )}
               <Button
                 type="submit"
                 size="xl"
                 disabled={isLoading}
                 loading={isLoading}
-                className="mt-5 h-16 w-full rounded-full bg-white/40 text-xl font-semibold text-black/80 hover:bg-white/50 dark:bg-white/40 dark:text-black/80 dark:hover:bg-white/50"
+                className="mt-5 h-16 w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {isLoading ? "" : "Continue"}
               </Button>
@@ -211,7 +211,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               type="button"
               onClick={handleGuestLogin}
               disabled={isLoading}
-              className="mt-4 text-center text-sm font-medium text-white/50 underline-offset-4 hover:text-white/80 hover:underline disabled:opacity-50"
+              className="mt-4 text-center text-sm font-medium text-foreground/50 underline-offset-4 hover:text-foreground/80 hover:underline disabled:opacity-50"
             >
               Continue as guest
             </button>
@@ -223,9 +223,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               <h1 className="mt-7 font-heading text-3xl font-semibold tracking-tight">
                 Check your email
               </h1>
-              <p className="mt-3 text-center text-base text-white/60">
+              <p className="mt-3 text-center text-base text-foreground/60">
                 We sent a 6-digit code to{" "}
-                <span className="font-semibold text-white">{step.email}</span>
+                <span className="font-semibold text-foreground">{step.email}</span>
               </p>
             </div>
 
@@ -243,21 +243,21 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   <OTPFieldInput
                     key={index}
                     aria-label={index === 0 ? undefined : `Character ${index + 1} of 6`}
-                    className="h-16 w-12 rounded-2xl border-white/15 bg-white/5 text-2xl font-semibold text-white shadow-none dark:border-white/15 dark:bg-white/5"
+                    className="h-16 w-12 rounded-2xl border-border/30 bg-background/50 text-2xl font-semibold text-foreground shadow-none"
                   />
                 ))}
               </OTPField>
               {error && (
-                <p className="text-center text-sm text-red-400">{error}</p>
+                <p className="text-center text-sm text-destructive">{error}</p>
               )}
               <Button
                 type="button"
                 size="xl"
                 disabled={isLoading || otp.length !== 6}
                 loading={isLoading}
-                className="h-16 w-full rounded-full bg-white font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
+                className="h-16 w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                {isLoading ? <Spinner className="text-black" /> : "Continue"}
+                {isLoading ? <Spinner className="text-primary-foreground" /> : "Continue"}
               </Button>
               <button
                 type="button"
@@ -267,7 +267,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   setError(null);
                 }}
                 disabled={isLoading}
-                className="text-sm font-medium text-white/50 hover:text-white/80 disabled:opacity-50"
+                className="text-sm font-medium text-foreground/50 hover:text-foreground/80 disabled:opacity-50"
               >
                 Use a different email
               </button>
