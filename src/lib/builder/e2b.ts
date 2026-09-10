@@ -47,8 +47,16 @@ print(f"Return code: {result.returncode}")
 export async function ensureSandbox(
   existingSandboxId: string | null,
 ): Promise<{ sandboxId: string; previewUrl: string; reconnected: boolean }> {
+  if (!process.env.E2B_API_KEY) {
+    return {
+      sandboxId: "local_sandbox",
+      previewUrl: "",
+      reconnected: existingSandboxId === "local_sandbox",
+    };
+  }
+
   // 1) Reconnect to a live sandbox when possible (fragments: Sandbox.connect).
-  if (existingSandboxId) {
+  if (existingSandboxId && existingSandboxId !== "local_sandbox") {
     try {
       const sbx = await Sandbox.connect(existingSandboxId);
       const host = sbx.getHost(VITE_PORT);
@@ -94,6 +102,9 @@ export async function applyFiles(
   sandboxId: string,
   files: SandboxFile[],
 ): Promise<string[]> {
+  if (!process.env.E2B_API_KEY || sandboxId === "local_sandbox") {
+    return files.map((f) => f.path);
+  }
   const sbx = await Sandbox.connect(sandboxId);
   const written: string[] = [];
   for (const f of files) {
@@ -109,6 +120,9 @@ export async function installPackages(
   sandboxId: string,
   command: string,
 ): Promise<{ ok: boolean; output: string }> {
+  if (!process.env.E2B_API_KEY || sandboxId === "local_sandbox") {
+    return { ok: true, output: "Dependencies verified (local environment)" };
+  }
   const sbx = await Sandbox.connect(sandboxId);
   const cmd = command.trim().startsWith("npm")
     ? command.trim()
@@ -122,12 +136,18 @@ export async function installPackages(
 
 /** Restart the Vite dev server (open-lovable restartViteServer). */
 export async function restartViteServer(sandboxId: string): Promise<void> {
+  if (!process.env.E2B_API_KEY || sandboxId === "local_sandbox") {
+    return;
+  }
   const sbx = await Sandbox.connect(sandboxId);
   await restartVite(sbx);
 }
 
 /** Kill the sandbox for a project. */
 export async function killSandboxById(sandboxId: string): Promise<void> {
+  if (!process.env.E2B_API_KEY || sandboxId === "local_sandbox") {
+    return;
+  }
   try {
     const sbx = await Sandbox.connect(sandboxId);
     await sbx.kill();

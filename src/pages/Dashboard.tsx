@@ -69,7 +69,7 @@ function Home() {
     return projects.filter((p: Doc<"projects">) => p.name.toLowerCase().includes(q));
   }, [projects, prompt]);
 
-  const workspaceLabel = `${displayName}'s Lovable`;
+  const workspaceLabel = `${displayName}'s Slopifire`;
   const initial = displayName.charAt(0).toUpperCase();
 
   const handleCreate = async (text: string) => {

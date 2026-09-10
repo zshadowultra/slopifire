@@ -1,20 +1,18 @@
 import { LovableHeart, LovableWordmark } from "@/components/LovableLogo";
 import LightRays from "@/components/LightRays";
 import { Button } from "@/components/coss/button";
-import { Badge } from "@/components/coss/badge";
 import { useDarkMode } from "@/hooks/use-dark-mode";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   Bell,
   Database,
-  Github,
   MessagesSquare,
   Palette,
   Rocket,
   Sparkles,
 } from "lucide-react";
-import { Lean, MicroButton, BubbleIn } from "@/components/micro";
+import { Lean, MicroButton } from "@/components/micro";
 import { Suspense } from "react";
 import { useNavigate } from "react-router";
 
@@ -130,31 +128,15 @@ function Landing() {
 
         {/* Hero */}
         <section className="mx-auto flex w-full max-w-4xl flex-col items-center px-6 pb-20 pt-20 text-center sm:pt-28">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <BubbleIn>
-              <Badge
-                variant="secondary"
-                className="rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-sm text-white/80 dark:bg-white/10 dark:text-white/80"
-              >
-                <Sparkles className="size-3.5" />
-                Idea in, app out
-              </Badge>
-            </BubbleIn>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08 }}
-            className="mt-6 font-heading text-5xl font-semibold tracking-tight text-balance sm:text-7xl"
+            className="font-heading text-5xl font-semibold tracking-tight text-balance sm:text-7xl"
           >
             Build something{" "}
-            <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-violet-500 bg-clip-text text-transparent">
-              Lovable
+            <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+              Slopifire
             </span>
           </motion.h1>
 
@@ -164,9 +146,7 @@ function Landing() {
             transition={{ duration: 0.55, delay: 0.16 }}
             className="mt-5 max-w-xl text-lg text-white/65 sm:text-xl"
           >
-            Chat your way from “what should we build?” to a shipped product —
-            with projects, permissions and a workspace that remembers your
-            style.
+            Make your thoughts alive — turn raw ideas into real, working apps in seconds.
           </motion.p>
 
           <motion.div
@@ -183,17 +163,6 @@ function Landing() {
               >
                 Start building free
                 <ArrowRight />
-              </Button>
-            </MicroButton>
-            <MicroButton>
-              <Button
-                onClick={() => navigate("/auth")}
-                size="xl"
-                variant="outline"
-                className="h-14 rounded-full border-white/15 bg-white/5 px-8 text-lg text-white/80 hover:bg-white/10 hover:text-white dark:bg-white/5 dark:text-white/80"
-              >
-                <Github className="fill-current" />
-                Continue with GitHub
               </Button>
             </MicroButton>
           </motion.div>
@@ -315,7 +284,7 @@ function Landing() {
         </section>
 
         <footer className="border-t border-white/10 py-8 text-center text-sm text-white/40">
-          A Lovable-style replica built with coss ui, Convex & LightRays.
+          Slopifire — Built with modern React, Tailwind & LightRays.
         </footer>
       </div>
     </div>

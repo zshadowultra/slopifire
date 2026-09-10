@@ -1,7 +1,6 @@
 import { LovableHeart } from "@/components/LovableLogo";
 import LightRays from "@/components/LightRays";
 import { Button } from "@/components/coss/button";
-import { Switch } from "@/components/coss/switch";
 import { api } from "@/convex/_generated/api";
 import { useAuth } from "@/hooks/use-auth";
 import { useDarkMode } from "@/hooks/use-dark-mode";
@@ -187,45 +186,36 @@ function OnboardingInner() {
                   </p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center gap-3">                  <MicroButton>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="xl"
-                      className="h-14 flex-1 rounded-full bg-white/10 text-base font-semibold text-white hover:bg-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-                      onClick={() => void finish(theme)}
-                    >
-                      Skip
-                    </Button>
-                  </MicroButton>
-                  <MicroButton>
-                    <Button
-                      type="button"
-                      size="xl"
-                      className="h-14 flex-1 rounded-full bg-blue-600 text-base font-semibold text-white shadow-none hover:bg-blue-500 dark:bg-blue-600 dark:text-white"
-                      onClick={() => {
-                        try {
-                          void Notification.requestPermission?.();
-                        } catch {
-                          /* unsupported */
-                        }
-                        void finish(theme);
-                      }}
-                    >
-                      Enable
-                    </Button>
-                  </MicroButton>
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <MicroButton className="w-full">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="xl"
+                    className="h-14 w-full rounded-full bg-white/10 text-base font-semibold text-white hover:bg-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                    onClick={() => void finish(theme)}
+                  >
+                    Skip
+                  </Button>
+                </MicroButton>
+                <MicroButton className="w-full">
+                  <Button
+                    type="button"
+                    size="xl"
+                    className="h-14 w-full rounded-full bg-blue-600 text-base font-semibold text-white shadow-none hover:bg-blue-500 dark:bg-blue-600 dark:text-white"
+                    onClick={() => {
+                      try {
+                        void Notification.requestPermission?.();
+                      } catch {
+                        /* unsupported */
+                      }
+                      void finish(theme);
+                    }}
+                  >
+                    Allow
+                  </Button>
+                </MicroButton>
               </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-between rounded-3xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur">
-              <div className="min-w-0">
-                <p className="text-lg font-semibold">Email updates</p>
-                <p className="mt-1 text-base text-white/60">
-                  Tips and product news
-                </p>
-              </div>
-              <Switch defaultChecked className="data-unchecked:bg-white/15" />
             </div>
           </>
         )}

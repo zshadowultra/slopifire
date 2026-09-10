@@ -181,7 +181,7 @@ function Chat() {
                 Start the conversation
               </p>
               <p className="max-w-xs text-muted-foreground">
-                Describe what you want to build and Lovable will get to work.
+                Describe what you want to build and Slopifire will get to work.
               </p>
             </div>
           ) : (
@@ -249,7 +249,7 @@ function Chat() {
                   void handleSend(input);
                 }
               }}
-              placeholder="Ask Lovable…"
+              placeholder="Ask Slopifire…"
               rows={2}
               className="w-full resize-none bg-transparent px-5 pt-4 text-lg outline-none placeholder:text-muted-foreground/70"
             />
@@ -343,7 +343,7 @@ function Chat() {
           await signOut();
           navigate("/");
         }}
-        workspaceLabel={`${displayName}'s Lovable`}
+        workspaceLabel={`${displayName}'s Slopifire`}
         initial={displayName.charAt(0).toUpperCase()}
       />
     </div>

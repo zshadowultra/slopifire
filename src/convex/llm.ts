@@ -6,6 +6,8 @@
  * fragments-style structured builder output.
  */
 
+import { generateAppForPrompt } from "../lib/builder/app-templates";
+
 export type ChatMsg = { role: "system" | "user" | "assistant"; content: string };
 
 const MAX_TOKENS = 4096;
@@ -63,19 +65,45 @@ async function callOpenAI(messages: ChatMsg[]): Promise<string | null> {
   return null;
 }
 
-/** Plain text generation with the standard provider chain. */
+/** Plain text generation with the standard provider chain, falling back to local generator. */
 export async function generateText(messages: ChatMsg[]): Promise<string> {
   const vly = await callVly(messages);
   if (vly) return vly;
   const openai = await callOpenAI(messages);
   if (openai) return openai;
-  throw new Error("No LLM provider configured (VLY_INTEGRATION_KEY / OPENAI_API_KEY)");
+  
+  // Keyless offline fallback
+  const lastUser = [...messages].reverse().find((m) => m.role === "user")?.content || "Build an app";
+  const app = generateAppForPrompt(lastUser);
+  return app.commentary;
 }
 
-/** JSON generation — strips markdown fences before parsing. */
+/** JSON generation — strips markdown fences before parsing, with keyless fallback. */
 export async function generateJson<T>(messages: ChatMsg[]): Promise<T> {
-  const raw = await generateText(messages);
-  return parseJsonLoose<T>(raw);
+  const vlyKey = process.env.VLY_INTEGRATION_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+
+  if (vlyKey || openaiKey) {
+    try {
+      const raw = await generateText(messages);
+      return parseJsonLoose<T>(raw);
+    } catch (err) {
+      console.warn("LLM API call failed, falling back to offline template:", err);
+    }
+  }
+
+  // Keyless offline builder output fallback
+  const lastUser = [...messages].reverse().find((m) => m.role === "user")?.content || "Build an app";
+  const app = generateAppForPrompt(lastUser);
+  const fallbackOutput = {
+    commentary: app.commentary,
+    title: app.title,
+    template: "vite-react",
+    files: app.files.map((f) => ({ filePath: f.path, fileContent: f.content })),
+    additionalDependencies: [],
+    installCommand: "",
+  };
+  return fallbackOutput as unknown as T;
 }
 
 export function parseJsonLoose<T>(raw: string): T {

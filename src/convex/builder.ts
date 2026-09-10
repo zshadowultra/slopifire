@@ -180,6 +180,15 @@ export const run = internalAction({
     }
 
     // ── 5. Persist results (assistant msg, files, preview URL) ───────────
+    if (!previewUrl) {
+      const indexFile = output.files.find((f) => f.filePath === "index.html");
+      if (indexFile) {
+        previewUrl =
+          "data:text/html;charset=utf-8," +
+          encodeURIComponent(indexFile.fileContent);
+      }
+    }
+
     await ctx.runMutation(internal.projects.saveBuild, {
       projectId,
       userId,

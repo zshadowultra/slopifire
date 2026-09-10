@@ -163,6 +163,21 @@ export const getGeneratedFiles = internalQuery({
   },
 });
 
+/** Public: list generated files for a project. */
+export const listFiles = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, { projectId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) return [];
+    const project = await ctx.db.get(projectId);
+    if (project === null || project.userId !== userId) return [];
+    return await ctx.db
+      .query("generatedFiles")
+      .withIndex("by_project_path", (q) => q.eq("projectId", projectId))
+      .collect();
+  },
+});
+
 /** Internal: store the assistant reply and clear the pending flag. */
 export const appendAssistantMessage = internalMutation({
   args: {
