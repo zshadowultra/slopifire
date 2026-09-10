@@ -10,6 +10,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "convex/react": path.resolve(__dirname, "./src/lib/mock-convex.tsx"),
+      "@convex-dev/auth/react": path.resolve(__dirname, "./src/lib/mock-convex.tsx"),
     },
     // Force a single copy of React across all packages (including vlyPlugin).
     // Without this, @vly-ai/integrations can resolve its own React copy, which
@@ -89,10 +91,8 @@ export default defineConfig({
   },
   // Performance hints
   server: {
-    // Bind to all interfaces so WebContainer's server-ready event fires.
-    host: true,
-    port: 5173,
-    // Keep HMR on, but disable full-screen error overlay
+    host: "0.0.0.0",
+    port: 3000,
     hmr: {
       overlay: false,
     },

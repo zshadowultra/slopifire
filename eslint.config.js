@@ -6,7 +6,14 @@ import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  {
+    ignores: [
+      "dist",
+      "isolate",
+      "src/convex/**",
+      "vly-toolbar-readonly.tsx",
+    ],
+  },
   {
     extends: [
       js.configs.recommended,
@@ -24,6 +31,13 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/purity": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },

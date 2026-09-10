@@ -1,7 +1,6 @@
 import { LovableHeart } from "@/components/LovableLogo";
 import LightRays from "@/components/LightRays";
 import { Button } from "@/components/coss/button";
-import { Input } from "@/components/coss/input";
 import { Switch } from "@/components/coss/switch";
 import { api } from "@/convex/_generated/api";
 import { useAuth } from "@/hooks/use-auth";
@@ -11,7 +10,7 @@ import { Bell, Loader2 } from "lucide-react";
 import { MicroButton } from "@/components/micro";
 import { Suspense, useEffect, useState } from "react";
 import { useMutation } from "convex/react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 type Slide = 0 | 1;
 
@@ -21,8 +20,8 @@ function StylePreview({ theme }: { theme: "light" | "dark" }) {
     <div
       className={
         light
-          ? "flex h-full w-full overflow-hidden rounded-[14px] bg-card"
-          : "flex h-full w-full overflow-hidden rounded-[14px] bg-card"
+          ? "flex h-full w-full overflow-hidden rounded-[14px] bg-[#F2F1EC]"
+          : "flex h-full w-full overflow-hidden rounded-[14px] bg-[#232323]"
       }
     >
       <div className="flex w-1/2 flex-col gap-2 p-3">
@@ -30,21 +29,21 @@ function StylePreview({ theme }: { theme: "light" | "dark" }) {
         <div
           className={
             light
-              ? "mt-1 h-3 w-4/5 rounded bg-muted"
+              ? "mt-1 h-3 w-4/5 rounded bg-[#E3E1D9]"
               : "mt-1 h-3 w-4/5 rounded bg-white/10"
           }
         />
         <div
           className={
             light
-              ? "h-3 w-3/5 rounded bg-muted"
+              ? "h-3 w-3/5 rounded bg-[#E3E1D9]"
               : "h-3 w-3/5 rounded bg-white/10"
           }
         />
         <div
           className={
             light
-              ? "h-3 w-4/6 rounded bg-muted"
+              ? "h-3 w-4/6 rounded bg-[#E3E1D9]"
               : "h-3 w-4/6 rounded bg-white/10"
           }
         />
@@ -52,8 +51,8 @@ function StylePreview({ theme }: { theme: "light" | "dark" }) {
       <div
         className={
           light
-            ? "m-2 w-1/2 rounded-lg bg-muted"
-            : "m-2 w-1/2 rounded-lg bg-muted"
+            ? "m-2 w-1/2 rounded-lg bg-[#EDEBE3]"
+            : "m-2 w-1/2 rounded-lg bg-[#2C2C2C]"
         }
       />
     </div>
@@ -68,11 +67,6 @@ function OnboardingInner() {
   const [slide, setSlide] = useState<Slide>(0);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [saving, setSaving] = useState(false);
-
-  const displayName =
-    user?.name ||
-    user?.email?.split("@")[0] ||
-    "there";
 
   useEffect(() => {
     if (!isLoading && user && user.onboardingComplete) {
@@ -92,7 +86,7 @@ function OnboardingInner() {
   };
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-background text-foreground">
+    <div className="relative min-h-dvh overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
         <LightRays
           raysOrigin="top-center"
@@ -107,7 +101,7 @@ function OnboardingInner() {
           mouseInfluence={0}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-black/60" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-transparent to-black/60" />
 
       <div className="isolate-root relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-6">
         {slide === 1 && (
@@ -258,8 +252,8 @@ export default function Onboarding() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-background">
-          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <div className="flex min-h-dvh items-center justify-center bg-black">
+          <Loader2 className="size-6 animate-spin text-white/50" />
         </div>
       }
     >

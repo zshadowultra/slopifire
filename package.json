@@ -1,10 +1,10 @@
 {
-  "name": "vite-template",
+  "name": "slopifire",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write .",

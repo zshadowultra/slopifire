@@ -83,7 +83,7 @@ function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-background text-foreground">
+    <div className="relative min-h-dvh overflow-hidden bg-black text-white">
       {/* LightRays (pulsating) backdrop */}
       <div className="absolute inset-0">
         <LightRays
@@ -136,7 +136,13 @@ function Landing() {
             transition={{ duration: 0.5 }}
           >
             <BubbleIn>
-              <Sparkles className="size-3.5" />
+              <Badge
+                variant="secondary"
+                className="rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-sm text-white/80 dark:bg-white/10 dark:text-white/80"
+              >
+                <Sparkles className="size-3.5" />
+                Idea in, app out
+              </Badge>
             </BubbleIn>
           </motion.div>
 
@@ -144,7 +150,7 @@ function Landing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08 }}
-            className="mt-6 font-heading text-5xl font-semibold tracking-tight text-balance sm:text-7xl text-white"
+            className="mt-6 font-heading text-5xl font-semibold tracking-tight text-balance sm:text-7xl"
           >
             Build something{" "}
             <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-violet-500 bg-clip-text text-transparent">
@@ -156,7 +162,7 @@ function Landing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16 }}
-            className="mt-5 max-w-xl text-lg text-white/70 sm:text-xl"
+            className="mt-5 max-w-xl text-lg text-white/65 sm:text-xl"
           >
             Chat your way from “what should we build?” to a shipped product —
             with projects, permissions and a workspace that remembers your
@@ -199,7 +205,7 @@ function Landing() {
             transition={{ duration: 0.6, delay: 0.34 }}
             className="mt-16 w-full max-w-2xl rounded-[28px] border border-white/10 bg-[#1b1d24]/90 p-1.5 shadow-2xl shadow-black/50 backdrop-blur"
           >
-            <div className="rounded-[22px] bg-background/60 p-5 text-left">
+            <div className="rounded-[22px] bg-black/40 p-5 text-left">
               <div className="flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-full bg-orange-600 text-sm font-semibold">
                   V
@@ -208,7 +214,7 @@ function Landing() {
                   What should we build, Vintage?
                 </p>
               </div>
-              <p className="mt-4 rounded-2xl bg-zinc-900/60 border border-white/8 px-4 py-3 text-base text-zinc-300">
+              <p className="mt-4 rounded-2xl bg-white/5 px-4 py-3 text-base text-white/60">
                 Build a landing page
               </p>
               <div className="mt-3 flex items-center justify-between px-1">
@@ -261,7 +267,7 @@ function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.45, delay: i * 0.1 }}
-                  className="rounded-3xl border border-white/10 bg-background/60 p-6 backdrop-blur"
+                  className="rounded-3xl border border-white/10 bg-black/40 p-6 backdrop-blur"
                 >
                   <span className="font-heading bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-4xl font-semibold text-transparent">
                     {s.step}
@@ -320,8 +326,8 @@ export default function LandingPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-background">
-          <div className="size-6 animate-pulse rounded-full bg-muted" />
+        <div className="flex min-h-dvh items-center justify-center bg-black">
+          <div className="size-6 animate-pulse rounded-full bg-white/20" />
         </div>
       }
     >

@@ -1,6 +1,5 @@
-import { LovableHeart, LovableWordmark } from "@/components/LovableLogo";
+import { LovableWordmark } from "@/components/LovableLogo";
 import LightRays from "@/components/LightRays";
-import { Button } from "@/components/coss/button";
 import {
   Drawer,
   DrawerClose,
@@ -67,7 +66,7 @@ function Home() {
     if (!projects) return null;
     const q = prompt.trim().toLowerCase(); // reuse composer query for demo search
     if (!q) return projects;
-    return projects.filter((p) => p.name.toLowerCase().includes(q));
+    return projects.filter((p: Doc<"projects">) => p.name.toLowerCase().includes(q));
   }, [projects, prompt]);
 
   const workspaceLabel = `${displayName}'s Lovable`;
@@ -88,13 +87,14 @@ function Home() {
 
   if (authLoading || !onboardingReady) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-background">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      <main className="flex min-h-dvh items-center justify-center bg-black">
+        <Loader2 className="size-6 animate-spin text-white/50" />
       </main>
     );
   }
 
-  return (      <div className="isolate-root relative flex h-dvh flex-col overflow-hidden bg-background text-foreground">
+  return (
+    <div className="isolate-root relative flex h-dvh flex-col overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
         <LightRays
           raysOrigin="bottom-center"
@@ -310,7 +310,7 @@ function Home() {
             <MicroButton>
               <button
                 type="button"
-                className="flex h-12 shrink-0 items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-3 text-left hover:bg-white/10"
+                className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-2 text-left hover:bg-white/10"
               >
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-base font-semibold text-white">
                   {initial}
@@ -451,8 +451,8 @@ export default function Dashboard() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-background">
-          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <div className="flex min-h-dvh items-center justify-center bg-black">
+          <Loader2 className="size-6 animate-spin text-white/50" />
         </div>
       }
     >

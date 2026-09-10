@@ -1,5 +1,4 @@
 import { LovableHeart } from "@/components/LovableLogo";
-import { Button } from "@/components/coss/button";
 import {
   Drawer,
   DrawerClose,
@@ -27,7 +26,6 @@ import {
   Loader2,
   LogOut,
   Menu as MenuIcon,
-  Mic,
   MoreHorizontal,
   Paperclip,
   Plus,
@@ -69,23 +67,8 @@ function Chat() {
   const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const project = (projects ?? []).find((p) => p._id === projectId);
+  const project = (projects ?? []).find((p: Doc<"projects">) => p._id === projectId);
   const displayName = user?.name || user?.email?.split("@")[0] || "there";
-
-  // Send the initial prompt that started this project.
-  const initialSentRef = useRef(false);
-  useEffect(() => {
-    if (initialPrompt && !initialSentRef.current) {
-      initialSentRef.current = true;
-      navigate(location.pathname, { replace: true, state: null });
-      void handleSend(initialPrompt);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages === undefined || messages === null ? 0 : messages.length]);
 
   const handleSend = async (text: string) => {
     const content = text.trim();
@@ -100,6 +83,22 @@ function Chat() {
       setSending(false);
     }
   };
+
+  // Send the initial prompt that started this project.
+  const initialSentRef = useRef(false);
+  useEffect(() => {
+    if (initialPrompt && !initialSentRef.current) {
+      initialSentRef.current = true;
+      navigate(location.pathname, { replace: true, state: null });
+      void handleSend(initialPrompt);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const messageCount = messages?.length ?? 0;
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messageCount]);
 
   const suggestions = [
     "Build the app pages",
@@ -586,7 +585,7 @@ function ProjectsDrawer({
   const projects = useQuery(api.projects.listProjects, {});
   const [projectQuery, setProjectQuery] = useState("");
 
-  const filtered = (projects ?? []).filter((p) =>
+  const filtered = (projects ?? []).filter((p: Doc<"projects">) =>
     p.name.toLowerCase().includes(projectQuery.trim().toLowerCase()),
   );
 

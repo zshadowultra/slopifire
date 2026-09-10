@@ -1,0 +1,6 @@
+{
+  "name": "Slopifire",
+  "description": "Lovable clone application builder web app with projects, chat-based prototyping, and preview.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
