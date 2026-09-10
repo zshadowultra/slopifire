@@ -136,13 +136,7 @@ function Landing() {
             transition={{ duration: 0.5 }}
           >
             <BubbleIn>
-              <Badge
-                variant="secondary"
-                className="rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-sm text-white/80 dark:bg-white/10 dark:text-white/80"
-              >
-                <Sparkles className="size-3.5" />
-                Idea in, app out
-              </Badge>
+              <Sparkles className="size-3.5" />
             </BubbleIn>
           </motion.div>
 
@@ -214,7 +208,7 @@ function Landing() {
                   What should we build, Vintage?
                 </p>
               </div>
-              <p className="mt-4 rounded-2xl bg-white/5 px-4 py-3 text-base text-white/60">
+              <p className="mt-4 rounded-2xl bg-zinc-900/60 border border-white/8 px-4 py-3 text-base text-zinc-300">
                 Build a landing page
               </p>
               <div className="mt-3 flex items-center justify-between px-1">
