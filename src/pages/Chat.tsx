@@ -19,8 +19,10 @@ import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import {
+  AppWindow,
   ChevronDown,
   Copy,
+  ExternalLink,
   Link2,
   Loader2,
   LogOut,
@@ -29,6 +31,7 @@ import {
   MoreHorizontal,
   Paperclip,
   Plus,
+  RotateCw,
   Search,
   ThumbsDown,
   ThumbsUp,
@@ -59,7 +62,6 @@ function Chat() {
   });
   const projects = useQuery(api.projects.listProjects, {});
   const sendMessage = useMutation(api.projects.sendMessage);
-  const createProject = useMutation(api.projects.createProject);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -105,149 +107,187 @@ function Chat() {
   ];
 
   return (
-    <div className="isolate-root flex h-dvh flex-col bg-background text-foreground">
-      {/* Top bar */}
-      <header className="flex h-16 shrink-0 items-center justify-between px-4">
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(true)}
-          aria-label="Open projects"
-          className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
-        >
-          <MenuIcon className="size-5" />
-        </button>
+    <div className="isolate-root flex h-dvh bg-background text-foreground">
+      {/* Left column: chat (top bar, messages, composer) */}
+      <div className="flex h-full min-w-0 flex-1 flex-col">
+        {/* Top bar */}
+        <header className="flex h-16 shrink-0 items-center justify-between px-4">
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open projects"
+            className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
+          >
+            <MenuIcon className="size-5" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => navigate("/dashboard")}
-          className="flex h-12 max-w-[55vw] items-center gap-2 rounded-full border border-border bg-card px-5 text-xl font-semibold hover:bg-accent"
-        >
-          <span className="truncate">{project?.name ?? "New project"}</span>
-          <ChevronDown className="size-5 shrink-0 opacity-60" />
-        </button>
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            className="flex h-12 max-w-[55vw] items-center gap-2 rounded-full border border-border bg-card px-5 text-xl font-semibold hover:bg-accent"
+          >
+            <span className="truncate">{project?.name ?? "New project"}</span>
+            <ChevronDown className="size-5 shrink-0 opacity-60" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => navigate("/dashboard")}
-          aria-label="Back to home"
-          className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
-        >
-          <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m9 6 6 6-6 6" />
-          </svg>
-        </button>
-      </header>
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            aria-label="Back to home"
+            className="flex size-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-accent"
+          >
+            <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 6 6 6-6 6" />
+            </svg>
+          </button>
+        </header>
 
-      {/* Messages */}
-      <main className="no-scrollbar flex-1 overflow-y-auto px-5 pb-4">
-        {messages === undefined ? (
-          <div className="flex items-center gap-2 pt-10 text-muted-foreground">
-            <Loader2 className="size-4 animate-spin" /> Loading…
-          </div>
-        ) : messages === null ? (
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-            <LovableHeart size={48} />
-            <p className="font-heading text-2xl font-semibold">
-              Project not found
-            </p>
-            <p className="max-w-xs text-muted-foreground">
-              This project doesn&apos;t exist or belongs to another workspace.
-            </p>
-          </div>
-        ) : messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-            <LovableHeart size={48} />
-            <p className="font-heading text-2xl font-semibold">
-              Start the conversation
-            </p>
-            <p className="max-w-xs text-muted-foreground">
-              Describe what you want to build and Lovable will get to work.
-            </p>
-          </div>
-        ) : (
-          <div className="mx-auto flex max-w-2xl flex-col gap-5 pt-4">
-            {messages.map((m: Doc<"messages">) => (
-              <MessageBubble key={m._id} message={m} />
-            ))}
-            {project?.replyPending && (
-              <div className="flex flex-col gap-2.5">
-                <p className="text-base text-muted-foreground">Thought for 1s</p>
-                <div className="flex items-center gap-2 text-lg text-muted-foreground">
-                  <Loader2 className="size-4 animate-spin" />
-                  Thinking…
+        {/* Messages */}
+        <main className="no-scrollbar flex-1 overflow-y-auto px-5 pb-4">
+          {messages === undefined ? (
+            <div className="flex items-center gap-2 pt-10 text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" /> Loading…
+            </div>
+          ) : messages === null ? (
+            <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+              <LovableHeart size={48} />
+              <p className="font-heading text-2xl font-semibold">
+                Project not found
+              </p>
+              <p className="max-w-xs text-muted-foreground">
+                This project doesn&apos;t exist or belongs to another workspace.
+              </p>
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+              <LovableHeart size={48} />
+              <p className="font-heading text-2xl font-semibold">
+                Start the conversation
+              </p>
+              <p className="max-w-xs text-muted-foreground">
+                Describe what you want to build and Lovable will get to work.
+              </p>
+            </div>
+          ) : (
+            <div className="mx-auto flex max-w-2xl flex-col gap-5 pt-4">
+              {messages.map((m: Doc<"messages">) => (
+                <MessageBubble key={m._id} message={m} />
+              ))}
+              {project?.replyPending && (
+                <div className="flex flex-col gap-2.5">
+                  <p className="text-base text-muted-foreground">Thought for 1s</p>
+                  <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                    <Loader2 className="size-4 animate-spin" />
+                    {project.sandboxStatus === "building"
+                      ? "Building your app…"
+                      : "Thinking…"}
+                  </div>
                 </div>
-              </div>
-            )}
-            <div ref={bottomRef} />
+              )}
+              <div ref={bottomRef} />
+            </div>
+          )}
+        </main>
+
+        {/* Mobile: open the live preview in a new tab */}
+        {project?.previewUrl && (
+          <div className="px-4 pb-2 lg:hidden">
+            <a
+              href={project.previewUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
+            >
+              <AppWindow className="size-4" />
+              Open live preview
+              <ExternalLink className="size-4" />
+            </a>
           </div>
         )}
-      </main>
 
-      {/* Suggestions + composer */}
-      <div className="shrink-0 px-4 pb-5">
-        <div className="no-scrollbar mb-3 flex gap-2.5 overflow-x-auto">
-          {suggestions.map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => void handleSend(s)}
-              className="shrink-0 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+        {/* Suggestions + composer */}
+        <div className="shrink-0 px-4 pb-5">
+          <div className="no-scrollbar mb-3 flex gap-2.5 overflow-x-auto">
+            {suggestions.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => void handleSend(s)}
+                className="shrink-0 rounded-full border border-border bg-card px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
 
-        <div className="rounded-[28px] border border-border bg-card shadow-lg shadow-black/10 dark:shadow-black/40">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                void handleSend(input);
-              }
-            }}
-            placeholder="Ask Lovable…"
-            rows={2}
-            className="w-full resize-none bg-transparent px-5 pt-4 text-lg outline-none placeholder:text-muted-foreground/70"
-          />
-          <div className="flex items-center justify-between px-3.5 pb-3.5 pt-1">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                aria-label="Attach"
-                className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              >
-                <Plus className="size-5" />
-              </button>
-              <button
-                type="button"
-                aria-label="More"
-                className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              >
-                <MoreHorizontal className="size-5" />
-              </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="flex h-10 items-center gap-1.5 rounded-full px-3 text-base font-medium transition-colors hover:bg-accent"
-              >
-                Build
-                <ChevronDown className="size-4 opacity-70" />
-              </button>
-              <button
-                type="button"
-                aria-label="Voice input"
-                className="flex size-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-accent"
-              >
-                <Mic className="size-5" />
-              </button>
+          <div className="rounded-[28px] border border-border bg-card shadow-lg shadow-black/10 dark:shadow-black/40">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  void handleSend(input);
+                }
+              }}
+              placeholder="Ask Lovable…"
+              rows={2}
+              className="w-full resize-none bg-transparent px-5 pt-4 text-lg outline-none placeholder:text-muted-foreground/70"
+            />
+            <div className="flex items-center justify-between px-3.5 pb-3.5 pt-1">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  aria-label="Attach"
+                  className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  <Plus className="size-5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="More"
+                  className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  <MoreHorizontal className="size-5" />
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="flex h-10 items-center gap-1.5 rounded-full px-3 text-base font-medium transition-colors hover:bg-accent"
+                >
+                  Build
+                  <ChevronDown className="size-4 opacity-70" />
+                </button>
+                <button
+                  type="button"
+                  disabled={!input.trim() || sending}
+                  onClick={() => void handleSend(input)}
+                  aria-label="Send"
+                  className="flex size-10 items-center justify-center rounded-full bg-foreground text-background transition-opacity disabled:opacity-30"
+                >
+                  {sending ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Right column: live preview panel (fragments fragment-web pattern) */}
+      <aside className="hidden min-h-0 w-[44%] max-w-[640px] shrink-0 flex-col border-l border-border lg:flex">
+        <PreviewPanel
+          previewUrl={project?.previewUrl ?? null}
+          status={project?.sandboxStatus ?? "idle"}
+        />
+      </aside>
 
       {/* Projects drawer */}
       <ProjectsDrawer
@@ -274,9 +314,110 @@ function Chat() {
   );
 }
 
+/**
+ * Live preview of the generated app running in the E2B sandbox —
+ * the fragment-web pattern from e2b-dev/fragments.
+ */
+function PreviewPanel({
+  previewUrl,
+  status,
+}: {
+  previewUrl: string | null;
+  status: "idle" | "building" | "running" | "error" | undefined;
+}) {
+  const [frameKey, setFrameKey] = useState(0);
+  const hasUrl = previewUrl !== null && previewUrl !== "";
+  const building = status === "building";
+
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      {/* Panel header */}
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-border px-4">
+        <div className="flex items-center gap-2.5">
+          <AppWindow className="size-4.5 text-muted-foreground" />
+          <span className="text-base font-semibold">Preview</span>
+          {building && (
+            <span className="flex items-center gap-1.5 rounded-full bg-orange-500/10 px-2.5 py-1 text-xs font-medium text-orange-500">
+              <Loader2 className="size-3 animate-spin" />
+              Building…
+            </span>
+          )}
+          {!building && status === "running" && hasUrl && (
+            <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-500">
+              Live
+            </span>
+          )}
+          {status === "error" && (
+            <span className="rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-500">
+              Error
+            </span>
+          )}
+        </div>
+        {hasUrl && (
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="Reload preview"
+              onClick={() => setFrameKey((k) => k + 1)}
+              className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <RotateCw className="size-4" />
+            </button>
+            <a
+              href={previewUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open in new tab"
+              className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <ExternalLink className="size-4" />
+            </a>
+          </div>
+        )}
+      </div>
+
+      {/* Preview body */}
+      {hasUrl ? (
+        <iframe
+          key={frameKey}
+          src={previewUrl}
+          title="App preview"
+          className="h-full w-full flex-1 bg-white"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        />
+      ) : (
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
+          {building ? (
+            <>
+              <Loader2 className="size-7 animate-spin text-muted-foreground" />
+              <p className="font-heading text-lg font-semibold">
+                Spinning up your sandbox…
+              </p>
+              <p className="max-w-xs text-sm text-muted-foreground">
+                Creating an E2B microVM, installing dependencies and starting
+                the dev server.
+              </p>
+            </>
+          ) : (
+            <>
+              <AppWindow className="size-7 text-muted-foreground/50" />
+              <p className="font-heading text-lg font-semibold">
+                No preview yet
+              </p>
+              <p className="max-w-xs text-sm text-muted-foreground">
+                Send a message and the generated app will appear here, running
+                live in a cloud sandbox.
+              </p>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MessageBubble({ message }: { message: Doc<"messages"> }) {
   const isUser = message.role === "user";
-  const [copied, setCopied] = useState(false);
 
   if (isUser) {
     return (
@@ -305,6 +446,12 @@ function MessageBubble({ message }: { message: Doc<"messages"> }) {
       {message.thoughtSeconds != null && (
         <p className="text-base text-muted-foreground">
           Thought for {message.thoughtSeconds}s
+        </p>
+      )}
+      {message.fileCount != null && message.fileCount > 0 && (
+        <p className="flex items-center gap-2 text-sm font-medium text-emerald-500">
+          <AppWindow className="size-4" />
+          Updated {message.fileCount} file{message.fileCount === 1 ? "" : "s"}
         </p>
       )}
       <p className="whitespace-pre-wrap text-lg leading-relaxed">

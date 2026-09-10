@@ -69,7 +69,8 @@ export const sendMessage = mutation({
       content: trimmed,
     });
     await ctx.db.patch(projectId, { replyPending: true });
-    await ctx.scheduler.runAfter(0, internal.ai.reply, {
+    // Builder loop: LLM structured output → E2B sandbox → live preview.
+    await ctx.scheduler.runAfter(0, internal.builder.run, {
       projectId,
       userId,
     });
@@ -92,7 +93,7 @@ export const renameProject = mutation({
   },
 });
 
-/** Delete a project and its messages. */
+/** Delete a project, its messages, generated files, and E2B sandbox. */
 export const deleteProject = mutation({
   args: { projectId: v.id("projects") },
   handler: async (ctx, { projectId }) => {
@@ -109,7 +110,32 @@ export const deleteProject = mutation({
     for (const msg of msgs) {
       await ctx.db.delete(msg._id);
     }
+    const files = await ctx.db
+      .query("generatedFiles")
+      .withIndex("by_project_path", (q) => q.eq("projectId", projectId))
+      .collect();
+    for (const file of files) {
+      await ctx.db.delete(file._id);
+    }
     await ctx.db.delete(projectId);
+    // Tear down the E2B sandbox in the background (best effort).
+    if (project.sandboxId) {
+      await ctx.scheduler.runAfter(0, internal.builder.destroy, {
+        projectId,
+        userId,
+        sandboxId: project.sandboxId,
+      });
+    }
+  },
+});
+
+/** Internal: project lookup guarded by ownership (sandbox actions use this). */
+export const getProject = internalQuery({
+  args: { projectId: v.id("projects"), userId: v.id("users") },
+  handler: async (ctx, { projectId, userId }) => {
+    const project = await ctx.db.get(projectId);
+    if (project === null || project.userId !== userId) return null;
+    return project;
   },
 });
 
@@ -123,6 +149,17 @@ export const recentHistory = internalQuery({
       .order("asc")
       .collect();
     return msgs.map((m) => ({ role: m.role, content: m.content }));
+  },
+});
+
+/** Internal: all generated source files for a project. */
+export const getGeneratedFiles = internalQuery({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, { projectId }) => {
+    return await ctx.db
+      .query("generatedFiles")
+      .withIndex("by_project_path", (q) => q.eq("projectId", projectId))
+      .collect();
   },
 });
 
@@ -142,5 +179,85 @@ export const appendAssistantMessage = internalMutation({
       thoughtSeconds: 1,
     });
     await ctx.db.patch(projectId, { replyPending: false });
+  },
+});
+
+/** Internal: clear sandbox connection info (after kill or before rebuild). */
+export const clearSandboxState = internalMutation({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, { projectId }) => {
+    await ctx.db.patch(projectId, {
+      sandboxId: undefined,
+      previewUrl: undefined,
+      sandboxStatus: "idle",
+    });
+  },
+});
+
+/** Internal: update just the sandbox status (used while building). */
+export const setSandboxStatus = internalMutation({
+  args: {
+    projectId: v.id("projects"),
+    status: v.union(
+      v.literal("idle"),
+      v.literal("building"),
+      v.literal("running"),
+      v.literal("error"),
+    ),
+  },
+  handler: async (ctx, { projectId, status }) => {
+    await ctx.db.patch(projectId, { sandboxStatus: status });
+  },
+});
+
+/** Internal: persist a successful build (assistant msg, files, preview URL). */
+export const saveBuild = internalMutation({
+  args: {
+    projectId: v.id("projects"),
+    userId: v.id("users"),
+    commentary: v.string(),
+    title: v.string(),
+    files: v.array(v.object({ path: v.string(), content: v.string() })),
+    sandboxId: v.string(),
+    previewUrl: v.string(),
+    isFirstBuild: v.boolean(),
+  },
+  handler: async (
+    ctx,
+    { projectId, userId, commentary, title, files, sandboxId, previewUrl, isFirstBuild },
+  ) => {
+    await ctx.db.insert("messages", {
+      projectId,
+      userId,
+      role: "assistant",
+      content: commentary,
+      thoughtSeconds: 1,
+      fileCount: files.length,
+      sandboxCreated: isFirstBuild,
+    });
+    for (const f of files) {
+      const existing = await ctx.db
+        .query("generatedFiles")
+        .withIndex("by_project_path", (q) =>
+          q.eq("projectId", projectId).eq("path", f.path),
+        )
+        .unique();
+      if (existing) {
+        await ctx.db.patch(existing._id, { content: f.content });
+      } else {
+        await ctx.db.insert("generatedFiles", {
+          projectId,
+          userId,
+          path: f.path,
+          content: f.content,
+        });
+      }
+    }
+    await ctx.db.patch(projectId, {
+      replyPending: false,
+      sandboxId,
+      previewUrl,
+      sandboxStatus: "running",
+    });
   },
 });
