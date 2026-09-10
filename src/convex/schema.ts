@@ -41,6 +41,8 @@ const schema = defineSchema(
       userId: v.id("users"),
       name: v.string(),
       isArchived: v.optional(v.boolean()),
+      // True while the scheduled AI action is generating the assistant reply.
+      replyPending: v.optional(v.boolean()),
     }).index("by_user", ["userId"]),
 
     // Messages inside a project thread

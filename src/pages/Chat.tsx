@@ -169,6 +169,15 @@ function Chat() {
             {messages.map((m: Doc<"messages">) => (
               <MessageBubble key={m._id} message={m} />
             ))}
+            {project?.replyPending && (
+              <div className="flex flex-col gap-2.5">
+                <p className="text-base text-muted-foreground">Thought for 1s</p>
+                <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                  <Loader2 className="size-4 animate-spin" />
+                  Thinking…
+                </div>
+              </div>
+            )}
             <div ref={bottomRef} />
           </div>
         )}

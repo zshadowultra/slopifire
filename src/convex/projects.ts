@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
-import { internalMutation, mutation, query } from "./_generated/server";
+import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 
 /** List the current user's projects, newest first. */
 export const listProjects = query({
@@ -43,7 +43,7 @@ export const listMessages = query({
   },
 });
 
-/** Append a user message and schedule the assistant reply generation. */
+/** Append a user message and schedule the AI assistant reply. */
 export const sendMessage = mutation({
   args: { projectId: v.id("projects"), content: v.string() },
   handler: async (ctx, { projectId, content }) => {
@@ -68,7 +68,8 @@ export const sendMessage = mutation({
       role: "user",
       content: trimmed,
     });
-    await ctx.scheduler.runAfter(0, internal.projects.generateReply, {
+    await ctx.db.patch(projectId, { replyPending: true });
+    await ctx.scheduler.runAfter(0, internal.ai.reply, {
       projectId,
       userId,
     });
@@ -112,19 +113,27 @@ export const deleteProject = mutation({
   },
 });
 
-/** Internal: naive "assistant" reply so the demo chat feels alive. */
-export const generateReply = internalMutation({
-  args: { projectId: v.id("projects"), userId: v.id("users") },
-  handler: async (ctx, { projectId, userId }) => {
+/** Internal: recent messages of the project (oldest → newest). */
+export const recentHistory = internalQuery({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, { projectId }) => {
     const msgs = await ctx.db
       .query("messages")
       .withIndex("by_project", (q) => q.eq("projectId", projectId))
       .order("asc")
       .collect();
-    const lastUser = [...msgs].reverse().find((m) => m.role === "user");
-    if (!lastUser) return;
+    return msgs.map((m) => ({ role: m.role, content: m.content }));
+  },
+});
 
-    const reply = buildReply(lastUser.content);
+/** Internal: store the assistant reply and clear the pending flag. */
+export const appendAssistantMessage = internalMutation({
+  args: {
+    projectId: v.id("projects"),
+    userId: v.id("users"),
+    reply: v.string(),
+  },
+  handler: async (ctx, { projectId, userId, reply }) => {
     await ctx.db.insert("messages", {
       projectId,
       userId,
@@ -132,22 +141,6 @@ export const generateReply = internalMutation({
       content: reply,
       thoughtSeconds: 1,
     });
+    await ctx.db.patch(projectId, { replyPending: false });
   },
 });
-
-function buildReply(prompt: string): string {
-  const p = prompt.toLowerCase();
-  if (/^(hi|hello|hey|yo|sup)\b/.test(p)) {
-    return "Hi there! How can I help you today?";
-  }
-  if (p.includes("landing")) {
-    return `Great choice! I sketched a landing page with a hero, feature grid, and call-to-action.\n\nSuggested structure:\n• Sticky nav with logo + CTA\n• Hero with headline and product screenshot\n• 3-column feature highlights\n• Footer with links and social icons\n\nWant me to build all of these sections now?`;
-  }
-  if (p.includes("dashboard") || p.includes("admin")) {
-    return `I can wire up a dashboard with cards for key metrics, a sidebar navigation, and a data table.\n\nShall I go ahead and create the pages?`;
-  }
-  if (p.includes("report")) {
-    return `I can generate a report view with filters, charts, and export to CSV. Which data source should it read from?`;
-  }
-  return `Got it — "${prompt.length > 60 ? `${prompt.slice(0, 60)}…` : prompt}". I've noted this for the build. Tell me a bit more about the screens you need, or say "build it" and I'll scaffold the pages.`;
-}
