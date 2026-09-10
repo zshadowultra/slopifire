@@ -11,7 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
     "@convex-dev/auth": "^0.0.90",
+    "@fontsource/cal-sans": "^5.3.0",
     "@hookform/resolvers": "^5.2.2",
     "@jridgewell/trace-mapping": "^0.3.31",
     "@oslojs/crypto": "^1.0.1",
@@ -56,6 +58,7 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.555.0",
     "next-themes": "^0.4.6",
+    "ogl": "^1.0.11",
     "react": "^19.2.0",
     "react-day-picker": "9.13.0",
     "react-dom": "^19.2.0",

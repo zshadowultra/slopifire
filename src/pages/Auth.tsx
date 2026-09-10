@@ -1,12 +1,14 @@
-import { Input } from "@/components/ui/input";
+import { LovableHeart } from "@/components/LovableLogo";
+import LightRays from "@/components/LightRays";
+import { Button } from "@/components/coss/button";
+import { Input } from "@/components/coss/input";
 import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+  OTPField,
+  OTPFieldInput,
+} from "@/components/coss/otp-field";
+import { Spinner } from "@/components/coss/spinner";
 import { useAuth } from "@/hooks/use-auth";
 import { useDarkMode } from "@/hooks/use-dark-mode";
-import { LovableHeart } from "@/components/LovableLogo";
 import { Github, Loader2 } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
@@ -99,56 +101,82 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   };
 
   return (
-    <div className="aurora min-h-dvh bg-black text-white">
-      <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-6">
-        {/* Status-bar spacing like the phone mock */}
-        <div className="h-16 shrink-0" />
+    <div className="relative min-h-dvh overflow-hidden bg-black text-white">
+      {/* LightRays (pulsating) background */}
+      <div className="absolute inset-0">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#FF6B4A"
+          raysSpeed={1.4}
+          lightSpread={0.9}
+          rayLength={2.4}
+          pulsating={true}
+          fadeDistance={1.2}
+          saturation={1.2}
+          followMouse={false}
+          mouseInfluence={0}
+          noiseAmount={0.05}
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-transparent to-black/70" />
+
+      <div className="isolate-root relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-6">
+        <div className="h-14 shrink-0" />
 
         {step === "signIn" ? (
           <>
-            <div className="mt-32">
-              <LovableHeart size={104} />
+            <div className="mt-28">
+              <LovableHeart size={96} />
             </div>
-            <h1 className="mt-10 text-5xl font-extrabold tracking-tight">
+            <h1 className="mt-8 font-heading text-5xl font-semibold tracking-tight">
               Log in
             </h1>
 
-            <div className="mt-12 flex flex-col gap-4">
-              <button
+            <div className="mt-10 flex flex-col gap-3.5">
+              <Button
                 type="button"
+                variant="outline"
+                size="xl"
+                loading={false}
                 disabled={isLoading}
-                className="flex h-16 w-full items-center gap-4 rounded-full border border-white/15 px-6 text-lg font-semibold text-white/50 transition-colors hover:border-white/30 hover:text-white/70 disabled:opacity-50"
+                className="w-full rounded-full border-white/15 bg-white/5 text-lg text-white/60 hover:border-white/30 hover:bg-white/10 hover:text-white/80 dark:bg-white/5"
                 onClick={() =>
-                  setError("Google sign-in is not available in this replica — use email below.")
+                  setError(
+                    "Google sign-in is not available in this replica — use email below.",
+                  )
                 }
               >
                 <GoogleGlyph />
-                <span className="flex-1 text-center pr-7">
+                <span className="flex-1 text-center">
                   Continue with Google
                 </span>
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="outline"
+                size="xl"
                 disabled={isLoading}
-                className="flex h-16 w-full items-center gap-4 rounded-full border border-white/15 px-6 text-lg font-semibold text-white/50 transition-colors hover:border-white/30 hover:text-white/70 disabled:opacity-50"
+                className="w-full rounded-full border-white/15 bg-white/5 text-lg text-white/60 hover:border-white/30 hover:bg-white/10 hover:text-white/80 dark:bg-white/5"
                 onClick={() =>
-                  setError("GitHub sign-in is not available in this replica — use email below.")
+                  setError(
+                    "GitHub sign-in is not available in this replica — use email below.",
+                  )
                 }
               >
-                <Github className="size-6 shrink-0 fill-current" />
-                <span className="flex-1 text-center pr-7">
+                <Github className="fill-current" />
+                <span className="flex-1 text-center">
                   Continue with GitHub
                 </span>
-              </button>
+              </Button>
             </div>
 
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-9 flex items-center gap-4">
               <span className="h-px flex-1 bg-white/15" />
               <span className="text-sm font-medium text-white/70">OR</span>
               <span className="h-px flex-1 bg-white/15" />
             </div>
 
-            <form onSubmit={handleEmailSubmit} className="mt-6">
+            <form onSubmit={handleEmailSubmit} className="mt-5">
               <label
                 htmlFor="email"
                 className="text-lg font-bold text-foreground"
@@ -163,22 +191,20 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 placeholder="Email"
                 autoComplete="email"
                 disabled={isLoading}
-                className="mt-3 h-16 rounded-full border-white/15 bg-white/5 px-6 text-lg text-white placeholder:text-white/30 focus-visible:border-white/40 focus-visible:ring-0"
+                className="mt-3 h-16 rounded-full border-white/15 bg-white/5 px-6 text-lg text-white shadow-none placeholder:text-white/30 focus-visible:border-white/40 dark:border-white/15 dark:bg-white/5"
               />
               {error && (
                 <p className="mt-3 px-2 text-sm text-red-400">{error}</p>
               )}
-              <button
+              <Button
                 type="submit"
+                size="xl"
                 disabled={isLoading}
-                className="mt-5 flex h-16 w-full items-center justify-center rounded-full bg-white/40 text-xl font-bold text-black/80 transition-colors hover:bg-white/50 disabled:opacity-60"
+                loading={isLoading}
+                className="mt-5 h-16 w-full rounded-full bg-white/40 text-xl font-semibold text-black/80 hover:bg-white/50 dark:bg-white/40 dark:text-black/80 dark:hover:bg-white/50"
               >
-                {isLoading ? (
-                  <Loader2 className="size-6 animate-spin text-black/70" />
-                ) : (
-                  "Continue"
-                )}
-              </button>
+                {isLoading ? "" : "Continue"}
+              </Button>
             </form>
 
             <button
@@ -192,9 +218,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           </>
         ) : (
           <>
-            <div className="mt-24 flex flex-col items-center">
-              <LovableHeart size={72} />
-              <h1 className="mt-8 text-3xl font-extrabold tracking-tight">
+            <div className="mt-20 flex flex-col items-center">
+              <LovableHeart size={64} />
+              <h1 className="mt-7 font-heading text-3xl font-semibold tracking-tight">
                 Check your email
               </h1>
               <p className="mt-3 text-center text-base text-white/60">
@@ -203,43 +229,36 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               </p>
             </div>
 
-            <div className="mt-10 flex flex-col items-center gap-4">
-              <InputOTP
+            <div className="mt-10 flex flex-col items-center gap-5">
+              <OTPField
+                length={6}
                 value={otp}
-                onChange={setOtp}
-                maxLength={6}
+                onValueChange={setOtp}
+                onValueComplete={(value) => void handleOtpSubmit(value)}
                 disabled={isLoading}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && otp.length === 6 && !isLoading) {
-                    void handleOtpSubmit(otp);
-                  }
-                }}
+                aria-label="Verification code"
+                className="w-full justify-between"
               >
-                <InputOTPGroup className="gap-3">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <InputOTPSlot
-                      key={index}
-                      index={index}
-                      className="h-16 w-12 rounded-2xl border-white/15 bg-white/5 text-2xl font-bold text-white"
-                    />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <OTPFieldInput
+                    key={index}
+                    aria-label={index === 0 ? undefined : `Character ${index + 1} of 6`}
+                    className="h-16 w-12 rounded-2xl border-white/15 bg-white/5 text-2xl font-semibold text-white shadow-none dark:border-white/15 dark:bg-white/5"
+                  />
+                ))}
+              </OTPField>
               {error && (
                 <p className="text-center text-sm text-red-400">{error}</p>
               )}
-              <button
+              <Button
                 type="button"
-                onClick={() => void handleOtpSubmit(otp)}
+                size="xl"
                 disabled={isLoading || otp.length !== 6}
-                className="mt-2 flex h-16 w-full items-center justify-center rounded-full bg-white text-xl font-bold text-black transition-opacity hover:opacity-90 disabled:opacity-40"
+                loading={isLoading}
+                className="h-16 w-full rounded-full bg-white font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
               >
-                {isLoading ? (
-                  <Loader2 className="size-6 animate-spin" />
-                ) : (
-                  "Continue"
-                )}
-              </button>
+                {isLoading ? <Spinner className="text-black" /> : "Continue"}
+              </Button>
               <button
                 type="button"
                 onClick={() => {
@@ -257,6 +276,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
         )}
 
         <div className="flex-1" />
+        <div className="pb-6 pt-8" />
       </div>
     </div>
   );
@@ -279,7 +299,13 @@ function GoogleGlyph() {
 
 export default function AuthPage(props: AuthProps) {
   return (
-    <Suspense>
+    <Suspense
+      fallback={
+        <div className="flex min-h-dvh items-center justify-center bg-black">
+          <Loader2 className="size-6 animate-spin text-white/50" />
+        </div>
+      }
+    >
       <Auth {...props} />
     </Suspense>
   );
