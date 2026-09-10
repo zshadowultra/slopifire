@@ -43,7 +43,7 @@ import {
   Settings2,
   X,
 } from "lucide-react";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 
 function Home() {
@@ -52,6 +52,14 @@ function Home() {
   const navigate = useNavigate();
   const projects = useQuery(api.projects.listProjects, {});
   const createProject = useMutation(api.projects.createProject);
+
+  // First-time users go through the style/permissions onboarding first.
+  const onboardingReady = authLoading || (user ? user.onboardingComplete === true : false);
+  useEffect(() => {
+    if (!authLoading && user && user.onboardingComplete !== true) {
+      navigate("/onboarding", { replace: true });
+    }
+  }, [authLoading, user, navigate]);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [projectQuery, setProjectQuery] = useState("");
@@ -85,7 +93,7 @@ function Home() {
     }
   };
 
-  if (authLoading) {
+  if (authLoading || !onboardingReady) {
     return (
       <main className="flex min-h-dvh items-center justify-center bg-black">
         <Loader2 className="size-6 animate-spin text-white/50" />

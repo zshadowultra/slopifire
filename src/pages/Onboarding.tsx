@@ -162,6 +162,7 @@ function OnboardingInner() {
               disabled={saving}
               loading={saving}
               className="mt-10 h-16 w-full rounded-full bg-white font-semibold text-black hover:bg-white/90 dark:bg-white dark:text-black"
+              onClick={() => setSlide(1)}
             >
               {saving ? "" : "Next"}
             </Button>

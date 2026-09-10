@@ -144,6 +144,16 @@ function Chat() {
           <div className="flex items-center gap-2 pt-10 text-muted-foreground">
             <Loader2 className="size-4 animate-spin" /> Loading…
           </div>
+        ) : messages === null ? (
+          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+            <LovableHeart size={48} />
+            <p className="font-heading text-2xl font-semibold">
+              Project not found
+            </p>
+            <p className="max-w-xs text-muted-foreground">
+              This project doesn&apos;t exist or belongs to another workspace.
+            </p>
+          </div>
         ) : messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
             <LovableHeart size={48} />

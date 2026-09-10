@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 export function LovableHeart({
   size = 40,
   className,
@@ -5,6 +7,7 @@ export function LovableHeart({
   size?: number;
   className?: string;
 }) {
+  const gradientId = useId();
   return (
     <svg
       width={size}
@@ -15,7 +18,7 @@ export function LovableHeart({
     >
       <defs>
         <linearGradient
-          id="lovable-heart-gradient"
+          id={gradientId}
           x1="0.2"
           y1="0"
           x2="0.55"
@@ -29,7 +32,7 @@ export function LovableHeart({
       </defs>
       <path
         d="M50 92 C18 68 4 47 4 30 C4 14 16 4 30 4 C39 4 46.5 8.5 50 15.5 C53.5 8.5 61 4 70 4 C84 4 96 14 96 30 C96 47 82 68 50 92 Z"
-        fill="url(#lovable-heart-gradient)"
+        fill={`url(#${gradientId})`}
       />
     </svg>
   );
