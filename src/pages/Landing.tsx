@@ -144,7 +144,7 @@ function Landing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08 }}
-            className="mt-6 font-heading text-5xl font-semibold tracking-tight text-balance sm:text-7xl"
+            className="mt-6 font-heading text-5xl font-semibold tracking-tight text-balance sm:text-7xl text-white"
           >
             Build something{" "}
             <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-violet-500 bg-clip-text text-transparent">
@@ -156,7 +156,7 @@ function Landing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16 }}
-            className="mt-5 max-w-xl text-lg text-white/65 sm:text-xl"
+            className="mt-5 max-w-xl text-lg text-white/70 sm:text-xl"
           >
             Chat your way from “what should we build?” to a shipped product —
             with projects, permissions and a workspace that remembers your
