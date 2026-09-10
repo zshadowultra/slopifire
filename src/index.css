@@ -179,6 +179,14 @@
   [role="button"]:not([disabled]) {
     cursor: pointer;
   }
+  /* Cal Sans ships only weight 400 — let its native weight carry headings
+     instead of letting the browser synthesize faux-bold over it. */
+  .font-heading,
+  h1,
+  h2,
+  h3 {
+    font-weight: 400;
+  }
 }
 
 /* ---- App helpers ---- */

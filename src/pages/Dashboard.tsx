@@ -128,7 +128,7 @@ function Home() {
 
       {/* Composer */}
       <main className="isolate-root relative z-10 flex flex-1 flex-col justify-center px-6 pb-24">
-        <h1 className="font-heading text-4xl font-semibold tracking-tight text-balance">
+        <h1 className="font-heading text-4xl tracking-tight text-balance">
           What should we build, {displayName}?
         </h1>
 
